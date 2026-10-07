@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { ArrowUpRight, Github, Menu, X } from 'lucide-react'
+import { ArrowUpRight, Code2, Menu, X } from 'lucide-react'
 
 const navigation = [
   { label: 'Home', href: '#home' },
@@ -42,7 +42,7 @@ function Navbar() {
           type="button"
           aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
           aria-expanded={menuOpen}
-          aria-controls="primary-navigation"
+          aria-controls="mobile-navigation"
           onClick={() => setMenuOpen((open) => !open)}
         >
           {menuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -63,7 +63,7 @@ function Navbar() {
             ))}
           </div>
           <a className="nav-github" href={githubUrl} target="_blank" rel="noreferrer">
-            <Github size={16} aria-hidden="true" />
+            <Code2 size={16} aria-hidden="true" />
             <span>GitHub</span>
             <ArrowUpRight size={14} aria-hidden="true" />
           </a>

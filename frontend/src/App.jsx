@@ -9,7 +9,7 @@ function App() {
         Skip to content
       </a>
       <Navbar />
-      <main id="main-content">
+      <main className="min-h-screen" id="main-content">
         <Hero />
       </main>
     </>

@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from 'framer-motion'
-import { ArrowDownRight, ArrowUpRight, ExternalLink, Github, Linkedin } from 'lucide-react'
+import { ArrowDownRight, ArrowUpRight, BriefcaseBusiness, Code2, ExternalLink } from 'lucide-react'
 
 const focusItems = [
   { number: '01', title: 'Building', detail: 'Practical full-stack applications' },
@@ -57,11 +57,11 @@ function Hero() {
         <motion.div className="hero-socials" id="contact" {...reveal(0.26)} aria-label="Social profiles">
           <span className="social-label">Find me on</span>
           <a href="https://github.com/GoundPrincek" target="_blank" rel="noreferrer" aria-label="GitHub profile">
-            <Github size={17} aria-hidden="true" />
+            <Code2 size={17} aria-hidden="true" />
             <span>GitHub</span>
           </a>
           <a href="https://www.linkedin.com/in/goundprincek/" target="_blank" rel="noreferrer" aria-label="LinkedIn profile">
-            <Linkedin size={17} aria-hidden="true" />
+            <BriefcaseBusiness size={17} aria-hidden="true" />
             <span>LinkedIn</span>
           </a>
         </motion.div>
