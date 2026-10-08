@@ -1,0 +1,38 @@
+export const achievements = [
+  {
+    id: 'showcase',
+    number: '01',
+    category: 'Project showcase',
+    title: 'VNPS 2026',
+    summary: 'Showcased TrackIt and explained the idea behind the project.',
+    learned: ['Presenting a technical idea clearly', 'Making space for feedback and guidance', 'Thinking about a project beyond its code'],
+    icon: 'presentation',
+  },
+  {
+    id: 'debugging',
+    number: '02',
+    category: 'Technical competition',
+    title: 'StackFix: Debugging Battle',
+    summary: 'A four-hour Java debugging competition built around careful reasoning under time pressure.',
+    learned: ['Reading and tracing code', 'Breaking a failure into smaller questions', 'Debugging with Java under time constraints'],
+    icon: 'bug',
+  },
+  {
+    id: 'internship',
+    number: '03',
+    category: 'Internship',
+    title: 'InAmigos Foundation',
+    summary: 'An internship experience that broadened my professional and collaborative skills.',
+    learned: ['Communication', 'Teamwork'],
+    icon: 'briefcase',
+  },
+  {
+    id: 'education',
+    number: '04',
+    category: 'Engineering journey',
+    title: 'IT Engineering · 2024–2028',
+    summary: "Studying at Vidyavardhini's College of Engineering and Technology while building foundations for a software engineering career.",
+    learned: ['Programming foundations', 'Learning through projects and technical challenges'],
+    icon: 'graduation',
+  },
+]

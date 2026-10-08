@@ -1,115 +1,80 @@
 import { motion, useReducedMotion } from 'framer-motion'
-import { ArrowDownRight, ArrowUpRight, BriefcaseBusiness, Code2, ExternalLink } from 'lucide-react'
-
-const focusItems = [
-  { number: '01', title: 'Building', detail: 'Practical full-stack applications' },
-  { number: '02', title: 'Strengthening', detail: 'Java, DSA, and problem solving' },
-  { number: '03', title: 'Exploring', detail: 'Backend systems and developer workflows' },
-]
-
-const technologies = ['React', 'Node.js', 'Express', 'MongoDB', 'Java', 'Git']
+import { ArrowDown, ArrowUpRight, Code2, Terminal } from 'lucide-react'
+import { links } from '../../data/links.js'
 
 function Hero() {
   const reduceMotion = useReducedMotion()
   const reveal = (delay = 0) => reduceMotion
     ? {}
     : {
-        initial: { opacity: 0, y: 14 },
+        initial: { opacity: 0, y: 16 },
         animate: { opacity: 1, y: 0 },
-        transition: { duration: 0.45, delay, ease: 'easeOut' },
+        transition: { duration: 0.5, delay, ease: 'easeOut' },
       }
 
   return (
     <section className="hero page-shell" id="home" aria-labelledby="hero-title">
-      <div className="hero-grid" aria-hidden="true" />
+      <div className="hero-orbit" aria-hidden="true" />
       <div className="hero-copy">
         <motion.p className="eyebrow" {...reveal(0.02)}>
           <span className="status-dot" aria-hidden="true" />
-          Third-year IT engineering student
+          IT engineering student · Third year
         </motion.p>
-
-        <motion.h1 id="hero-title" {...reveal(0.08)}>
-          Hello, I’m <span className="hero-name">Prince Gound.</span>
-          <span className="hero-role">Full-Stack Developer &amp; IT Engineering Student</span>
+        <motion.p className="hero-greeting" {...reveal(0.06)}>Hello, I’m</motion.p>
+        <motion.h1 id="hero-title" {...reveal(0.1)}>
+          Prince <span className="hero-name">Gound.</span>
         </motion.h1>
-
-        <motion.p className="hero-description" id="about" {...reveal(0.14)}>
-          I build practical web applications and grow the engineering fundamentals behind them—
-          from full-stack development to Java, data structures, and backend systems.
+        <motion.p className="hero-role" {...reveal(0.15)}>
+          Full-Stack Developer <span>&amp;</span> IT Engineering Student
         </motion.p>
-
-        <motion.div className="hero-actions" id="projects" {...reveal(0.2)}>
-          <a
-            className="button button-primary"
-            href="https://github.com/GoundPrincek?tab=repositories"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Explore projects
-            <ArrowUpRight size={17} aria-hidden="true" />
+        <motion.p className="hero-description" {...reveal(0.2)}>
+          I build practical software, explore backend systems, and strengthen my problem-solving skills through Java, DSA, and real projects.
+        </motion.p>
+        <motion.div className="hero-actions" {...reveal(0.25)}>
+          <a className="button button-primary" href="#projects">
+            Explore my work <ArrowDown size={16} aria-hidden="true" />
           </a>
-          <a className="button button-secondary" href="https://www.linkedin.com/in/goundprincek/" target="_blank" rel="noreferrer">
-            Let’s connect
-            <ArrowUpRight size={16} aria-hidden="true" />
+          <a className="button button-secondary" href={links.linkedin} target="_blank" rel="noreferrer">
+            Let’s connect <ArrowUpRight size={16} aria-hidden="true" />
           </a>
         </motion.div>
-
-        <motion.div className="hero-socials" id="contact" {...reveal(0.26)} aria-label="Social profiles">
+        <motion.div className="hero-socials" {...reveal(0.3)} aria-label="Social profiles">
           <span className="social-label">Find me on</span>
-          <a href="https://github.com/GoundPrincek" target="_blank" rel="noreferrer" aria-label="GitHub profile">
-            <Code2 size={17} aria-hidden="true" />
-            <span>GitHub</span>
+          <a href={links.github} target="_blank" rel="noreferrer" aria-label="GitHub profile">
+            <Code2 size={17} aria-hidden="true" /><span>GitHub</span><ArrowUpRight size={13} aria-hidden="true" />
           </a>
-          <a href="https://www.linkedin.com/in/goundprincek/" target="_blank" rel="noreferrer" aria-label="LinkedIn profile">
-            <BriefcaseBusiness size={17} aria-hidden="true" />
-            <span>LinkedIn</span>
+          <a href={links.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn profile">
+            <span className="linkedin-mark" aria-hidden="true">in</span><span>LinkedIn</span><ArrowUpRight size={13} aria-hidden="true" />
           </a>
         </motion.div>
       </div>
 
-      <motion.aside className="focus-card" id="skills" {...reveal(0.16)} aria-label="Current development focus">
-        <div className="focus-card-topline">
+      <motion.aside className="hero-console" {...reveal(0.18)} aria-label="Current development focus">
+        <div className="console-topline">
           <span className="terminal-dots" aria-hidden="true"><i /><i /><i /></span>
-          <span className="card-label">CURRENT FOCUS</span>
-          <span className="card-index">01 / 03</span>
+          <span>BUILD LOG</span>
+          <span className="console-live"><span /> CURRENTLY BUILDING</span>
         </div>
-
-        <div className="focus-card-intro" id="journey">
-          <span className="focus-kicker">Learning by building</span>
-          <h2>Progress, in practice.</h2>
-          <p>A steady loop of shipping projects, strengthening fundamentals, and learning what comes next.</p>
+        <div className="console-body">
+          <p><span className="console-prompt">$</span> whoami</p>
+          <h2>Prince Gound</h2>
+          <p className="console-muted">IT engineering student · Full-stack developer</p>
+          <div className="console-divider" />
+          <p><span className="console-prompt">$</span> focus</p>
+          <p className="console-value">MERN <span>+</span> Java <span>+</span> DSA</p>
+          <p><span className="console-prompt">$</span> building</p>
+          <p className="console-value">Practical software &amp; backend systems<span className="console-cursor" aria-hidden="true">_</span></p>
         </div>
-
-        <div className="focus-list">
-          {focusItems.map(({ number, title, detail }) => (
-            <div className="focus-item" key={number}>
-              <span className="focus-number">{number}</span>
-              <div>
-                <h3>{title}</h3>
-                <p>{detail}</p>
-              </div>
-              <ArrowDownRight size={16} aria-hidden="true" />
-            </div>
-          ))}
+        <div className="console-footer">
+          <Terminal size={14} aria-hidden="true" />
+          <span>Learning by building</span>
+          <span className="console-index">01 / 09</span>
         </div>
-
-        <div className="tech-stack" aria-label="Technologies in current toolkit">
-          <span className="card-label">IN THE TOOLKIT</span>
-          <div className="tech-list">
-            {technologies.map((technology) => <span key={technology}>{technology}</span>)}
-          </div>
-        </div>
-
-        <a className="focus-link" href="https://github.com/GoundPrincek" target="_blank" rel="noreferrer">
-          See what I’m working on <ExternalLink size={14} aria-hidden="true" />
-        </a>
       </motion.aside>
 
       <div className="hero-bottom-note">
-        <span>01 — A little about how I build</span>
-        <a href="#about" aria-label="Jump to introduction">
-          Scroll to explore <ArrowDownRight size={15} aria-hidden="true" />
-        </a>
+        <span>Building my way forward.</span>
+        <a href="#focus">Scroll to explore <ArrowDown size={14} aria-hidden="true" /></a>
       </div>
     </section>
   )
