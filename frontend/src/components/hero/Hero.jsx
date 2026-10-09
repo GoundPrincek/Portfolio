@@ -1,6 +1,7 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowDown, ArrowUpRight, Code2, Terminal } from 'lucide-react'
 import { links } from '../../data/links.js'
+import { contactDetails } from '../../data/contact.js'
 
 function Hero() {
   const reduceMotion = useReducedMotion()
@@ -34,9 +35,9 @@ function Hero() {
           <a className="button button-primary" href="#projects">
             Explore my work <ArrowDown size={16} aria-hidden="true" />
           </a>
-          <a className="button button-secondary" href={links.linkedin} target="_blank" rel="noreferrer">
-            Let’s connect <ArrowUpRight size={16} aria-hidden="true" />
-          </a>
+          {contactDetails.resume
+            ? <a className="button button-secondary" href={contactDetails.resume} download>Download resume <ArrowUpRight size={16} aria-hidden="true" /></a>
+            : <a className="button button-secondary" href={links.linkedin} target="_blank" rel="noreferrer">Let’s connect <ArrowUpRight size={16} aria-hidden="true" /></a>}
         </motion.div>
         <motion.div className="hero-socials" {...reveal(0.3)} aria-label="Social profiles">
           <span className="social-label">Find me on</span>

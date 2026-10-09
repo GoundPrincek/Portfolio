@@ -20,7 +20,7 @@ function Contact() {
     <section className="section-block section-contact" id="contact" aria-labelledby="contact-title">
       <div className="page-shell contact-layout">
         <Reveal>
-          <SectionHeading number="09" eyebrow="Good things start with a conversation" title="Have an idea, opportunity, or project in mind?" description="I’m always interested in learning, building, and connecting with people working on interesting technical problems." id="contact-title" />
+          <SectionHeading number="09" eyebrow="Good things start with a conversation" title="Have an idea, opportunity, or project in mind?" description="I’m open to interesting projects, internship opportunities, and conversations about building useful software." id="contact-title" />
           <div className="contact-links">
             <a href={links.github} target="_blank" rel="noreferrer"><Code2 size={16} aria-hidden="true" /> GitHub <ArrowUpRight size={14} aria-hidden="true" /></a>
             <a href={links.linkedin} target="_blank" rel="noreferrer"><span className="linkedin-mark" aria-hidden="true">in</span> LinkedIn <ArrowUpRight size={14} aria-hidden="true" /></a>
@@ -43,7 +43,7 @@ function Contact() {
             <div className="contact-form contact-form-note">
               <Mail size={20} aria-hidden="true" />
               <h3>Start a conversation</h3>
-              <p>Reach me on LinkedIn or GitHub. A public email address can be added here whenever you’re ready.</p>
+              <p>For project, internship, or learning conversations, send me a note on LinkedIn.</p>
               <a className="button button-secondary" href={links.linkedin} target="_blank" rel="noreferrer">Message on LinkedIn <ArrowUpRight size={15} aria-hidden="true" /></a>
             </div>
           )}

@@ -10,7 +10,7 @@ function Achievements() {
     <section className="section-block section-experience" id="experience" aria-labelledby="experience-title">
       <div className="page-shell">
         <Reveal>
-          <SectionHeading number="04" eyebrow="Experiences that move me forward" title="What I’ve been part of" description="Each experience added a different tool to how I learn, collaborate, and solve problems." id="experience-title" />
+          <SectionHeading number="04" eyebrow="Experiences that move me forward" title="Experience & milestones" description="Each experience added a different tool to how I learn, collaborate, and solve problems." id="experience-title" />
         </Reveal>
         <div className="experience-grid">
           {achievements.map((item, index) => {
@@ -21,6 +21,7 @@ function Achievements() {
                   <div className="experience-topline"><span>{item.number}</span><Icon size={18} aria-hidden="true" /></div>
                   <p className="experience-category">{item.category}</p>
                   <h3>{item.title}</h3>
+                  <div className="experience-action"><span className="eyebrow-small">WHAT I DID</span><p>{item.did}</p></div>
                   <p className="experience-summary">{item.summary}</p>
                   <div className="experience-learnings">
                     <span className="eyebrow-small">WHAT I LEARNED</span>

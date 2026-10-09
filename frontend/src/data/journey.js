@@ -25,9 +25,9 @@ export const journey = [
     period: 'Ongoing',
     title: 'Building real projects',
     category: 'Projects',
-    description: 'I am developing TrackIt and working on early-stage ideas including DrishyaManch and SOS Setu, each with a different problem space to explore.',
+    description: 'I am developing TrackIt and exploring different problem spaces through DrishyaManch, SOS Setu, and VayuDrishti.',
     learned: 'A project is a series of decisions: what to solve, what to build first, and how to make the pieces fit.',
-    related: 'TrackIt · DrishyaManch · SOS Setu',
+    related: 'TrackIt · DrishyaManch · SOS Setu · VayuDrishti',
   },
   {
     id: 'vnps',

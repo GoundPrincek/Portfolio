@@ -1,12 +1,15 @@
 import { ArrowUpRight } from 'lucide-react'
 import { links } from '../../data/links.js'
 import { contactDetails } from '../../data/contact.js'
+import { useLocation } from 'react-router-dom'
 
 function Footer() {
+  const { pathname } = useLocation()
+  const homeHref = pathname === '/' ? '#home' : '/#home'
   return (
     <footer className="site-footer">
       <div className="page-shell footer-inner">
-        <a className="footer-brand" href="#home"><span className="brand-mark" aria-hidden="true">PG</span><span><strong>Prince Gound</strong><small>Full-Stack Developer &amp; IT Engineering Student</small></span></a>
+        <a className="footer-brand" href={homeHref}><span className="brand-mark" aria-hidden="true">PG</span><span><strong>Prince Gound</strong><small>Full-Stack Developer &amp; IT Engineering Student</small></span></a>
         <p>Building. Learning. Improving.</p>
         <div className="footer-links">
           <a href={links.github} target="_blank" rel="noreferrer">GitHub <ArrowUpRight size={13} aria-hidden="true" /></a>

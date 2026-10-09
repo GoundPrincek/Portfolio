@@ -38,6 +38,8 @@
 .nav-link.is-active::after, .nav-link:hover::after { transform: scaleX(1); }
 .nav-github { display: inline-flex; min-height: 36px; align-items: center; gap: 7px; padding-inline: 11px; border: 1px solid var(--line-strong); border-radius: 6px; color: var(--text-strong); font-size: 11px; text-decoration: none; transition: border-color 160ms ease, background-color 160ms ease; }
 .nav-github:hover { border-color: rgb(196 240 117 / 50%); background: rgb(196 240 117 / 6%); }
+.nav-resume { display: inline-flex; min-height: 36px; align-items: center; gap: 6px; padding-inline: 10px; border: 1px solid rgb(196 240 117 / 42%); border-radius: 6px; background: rgb(196 240 117 / 7%); color: var(--accent); font-size: 10px; text-decoration: none; white-space: nowrap; }
+.nav-resume:hover { background: rgb(196 240 117 / 13%); }
 .menu-toggle, .mobile-menu { display: none; }
 
 .hero {
@@ -51,7 +53,7 @@
   row-gap: 43px;
   padding-block: 76px 35px;
 }
-.hero-orbit { position: absolute; z-index: -1; top: -30px; right: -19vw; width: min(700px, 72vw); height: 680px; background: radial-gradient(ellipse at center, rgb(83 103 65 / 14%), transparent 67%); pointer-events: none; }
+.hero-orbit { position: absolute; z-index: -1; top: -30px; right: 0; width: min(700px, 72vw); height: 680px; background: radial-gradient(ellipse at center, rgb(83 103 65 / 14%), transparent 67%); pointer-events: none; }
 .hero-copy { max-width: 650px; min-width: 0; padding-block: 20px; }
 .eyebrow, .section-eyebrow, .section-number, .hero-greeting, .console-topline, .console-body, .console-index, .project-index, .experience-topline, .experience-category, .eyebrow-small, .journey-year, .journey-detail-year, .related-line > span, .project-story > div > span, .project-status, .building-label, .lesson-number, .lesson-source, .copyright { font-family: var(--font-mono); }
 .eyebrow { display: flex; align-items: center; gap: 10px; margin: 0 0 28px; color: var(--accent); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
@@ -162,6 +164,8 @@
 .experience-topline svg { color: var(--accent); }
 .experience-category { margin: 22px 0 7px; color: #8e9a88; font-size: 8px; letter-spacing: 0.08em; text-transform: uppercase; }
 .experience-card h3 { margin: 0; color: #e5eae2; font-size: 19px; font-weight: 530; letter-spacing: -0.04em; }
+.experience-action { margin-top: 13px; }
+.experience-action p { margin: 6px 0 0; color: #bcc5b8; font-size: 10px; line-height: 1.65; }
 .experience-summary { max-width: 530px; margin: 10px 0 17px; color: var(--text-muted); font-size: 11px; line-height: 1.7; }
 .experience-learnings { margin-top: auto; padding-top: 14px; border-top: 1px solid var(--line); }
 .experience-learnings ul { display: flex; flex-wrap: wrap; gap: 7px 17px; margin: 11px 0 0; padding-left: 16px; color: #c0c9bb; font-size: 10px; line-height: 1.7; }
@@ -177,9 +181,13 @@
 .project-index span { color: #687166; }
 .project-status { display: inline-flex; align-items: center; gap: 6px; padding: 5px 7px; border: 1px solid #343b34; border-radius: 20px; color: #9aa397; font-size: 8px; white-space: nowrap; }
 .project-status i { width: 5px; height: 5px; border-radius: 50%; background: #a5b47e; }
-.project-status.status-built i { background: var(--accent); }
+.project-status.status-active i { background: var(--accent); }
 .project-kind { margin: 22px 0 7px; color: #879283; font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.07em; text-transform: uppercase; }
 .project-card h3 { margin: 0; color: var(--text-strong); font-size: 23px; font-weight: 550; letter-spacing: -0.05em; }
+.project-title-link { color: inherit; text-decoration: none; }
+.project-title-link:hover { color: var(--accent); }
+.project-title-link > span { display: inline-block; margin-left: 5px; color: #a8b39f; font-family: var(--font-sans); font-size: 12px; font-weight: 450; letter-spacing: 0; }
+.project-tagline { margin: 5px 0 -2px; color: #b5c594; font-size: 10px; }
 .project-summary { min-height: 59px; margin: 9px 0 14px; color: var(--text-muted); font-size: 11px; line-height: 1.7; }
 .project-feature-list, .project-tech-list { display: flex; flex-wrap: wrap; gap: 6px; }
 .project-feature-list span { padding: 5px 7px; border: 1px solid #333b32; border-radius: 4px; color: #b8c1b4; font-size: 8px; }
@@ -266,6 +274,39 @@
 .footer-links a:hover { color: var(--accent); }
 .copyright { color: #747e71; font-size: 8px; white-space: nowrap; }
 
+.detail-page { min-height: calc(100svh - 176px); padding-top: 50px; padding-bottom: 100px; }
+.back-link { display: inline-flex; align-items: center; gap: 7px; margin-bottom: 31px; color: #a2ad9d; font-size: 10px; text-decoration: none; }
+.back-link:hover { color: var(--accent); }
+.detail-hero { padding: clamp(24px, 5vw, 51px); border: 1px solid var(--line-strong); border-radius: 8px; background: linear-gradient(115deg, rgb(196 240 117 / 5%), transparent 62%), #141815; }
+.detail-kicker { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; color: #899584; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.05em; text-transform: uppercase; }
+.detail-kicker > span:first-child { color: var(--accent); }
+.detail-kicker > span:last-child { margin-left: auto; }
+.detail-hero h1 { margin: 25px 0 0; color: var(--text-strong); font-size: clamp(40px, 7vw, 72px); font-weight: 540; letter-spacing: -0.075em; line-height: 1.04; }
+.detail-hero h1 > span { display: inline-block; margin-left: 8px; color: #9eaa95; font-size: 0.48em; font-weight: 450; letter-spacing: -0.03em; }
+.detail-tagline { margin: 9px 0 0; color: var(--accent); font-size: 14px; }
+.detail-summary { max-width: 760px; margin: 17px 0 0; color: #aeb7aa; font-size: 14px; line-height: 1.8; }
+.detail-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 22px; }
+.detail-content-grid { display: grid; grid-template-columns: minmax(0, 1fr) 285px; align-items: start; gap: clamp(30px, 6vw, 76px); margin-top: 58px; }
+.detail-main-column { min-width: 0; }
+.detail-section { padding-block: 29px; border-bottom: 1px solid var(--line); }
+.detail-section:first-child { padding-top: 0; }
+.detail-section .section-heading { margin-bottom: 12px; }
+.detail-section .section-heading-top { margin-bottom: 8px; }
+.detail-section .section-heading h2 { font-size: clamp(20px, 3vw, 28px); }
+.detail-section > p { max-width: 750px; margin: 0; color: #a8b2a5; font-size: 12px; line-height: 1.85; }
+.detail-feature-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px 16px; margin: 18px 0 0; padding-left: 16px; color: #c4cdbf; font-size: 10px; line-height: 1.6; }
+.detail-feature-list li::marker { color: var(--accent); }
+.detail-aside { position: sticky; top: 98px; display: grid; gap: 12px; }
+.detail-aside-card { padding: 17px; border: 1px solid var(--line); border-radius: 6px; background: #141815; }
+.detail-tech-list { display: flex; flex-wrap: wrap; gap: 7px; margin: 13px 0 0; padding: 0; list-style: none; }
+.detail-tech-list li { padding: 6px 8px; border: 1px solid #323a32; border-radius: 4px; color: #c0c9ba; font-family: var(--font-mono); font-size: 8px; }
+.detail-status-card h2, .detail-next-project h2 { margin: 11px 0 6px; color: #e4e9df; font-size: 16px; font-weight: 550; letter-spacing: -0.03em; }
+.detail-status-card > p:last-child, .detail-next-project > p { margin: 0; color: #8f9a8a; font-size: 10px; line-height: 1.7; }
+.detail-next-project > a { display: inline-flex; align-items: center; gap: 6px; margin-top: 15px; color: var(--accent); font-size: 10px; text-decoration: none; }
+.not-found-page { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; min-height: calc(100svh - 177px); }
+.not-found-page h1 { max-width: 650px; margin: 12px 0; color: var(--text-strong); font-size: clamp(36px, 6vw, 62px); font-weight: 540; letter-spacing: -0.07em; line-height: 1.05; }
+.not-found-page > p:not(.section-eyebrow) { max-width: 520px; margin: 0 0 20px; color: var(--text-muted); font-size: 12px; line-height: 1.7; }
+
 a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 
 @keyframes blink { to { visibility: hidden; } }
@@ -289,6 +330,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
   .mobile-nav-link { display: flex; min-height: 43px; align-items: center; justify-content: space-between; padding-inline: 11px; border-radius: 5px; color: var(--text-muted); font-size: 12px; text-decoration: none; }
   .mobile-nav-link:hover, .mobile-nav-link.is-active { background: rgb(196 240 117 / 7%); color: var(--accent); }
   .mobile-github-link { margin-top: 5px; border-top: 1px solid var(--line); border-radius: 0; color: var(--text-strong); }
+  .mobile-nav-link[download] { color: var(--accent); }
   .hero { min-height: unset; grid-template-columns: minmax(0, 1fr); row-gap: 37px; padding-block: 71px 29px; }
   .hero-copy { max-width: 630px; }
   .hero-console { width: min(100%, 560px); }
@@ -303,6 +345,9 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
   .journey-detail { min-height: unset; }
   .contact-layout { grid-template-columns: 1fr; gap: 26px; }
   .contact-form { max-width: 560px; }
+  .detail-content-grid { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .detail-aside { position: static; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .detail-next-project { grid-column: 1 / -1; }
 }
 
 @media (max-width: 560px) {
@@ -369,6 +414,18 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
   .github-copy { flex-basis: calc(100% - 52px); }
   .github-copy h2 { font-size: 20px; }
   .github-panel > .button { margin-left: 49px; }
+  .detail-page { padding-top: 35px; padding-bottom: 70px; }
+  .back-link { margin-bottom: 23px; }
+  .detail-hero { padding: 20px 16px; }
+  .detail-kicker { gap: 8px; font-size: 8px; }
+  .detail-kicker > span:last-child { flex-basis: 100%; margin-left: 0; }
+  .detail-hero h1 { margin-top: 19px; font-size: clamp(37px, 12vw, 53px); }
+  .detail-hero h1 > span { display: block; margin: 4px 0 0; font-size: 0.5em; }
+  .detail-summary { font-size: 12px; }
+  .detail-content-grid { margin-top: 36px; }
+  .detail-feature-list { grid-template-columns: minmax(0, 1fr); }
+  .detail-aside { grid-template-columns: minmax(0, 1fr); }
+  .detail-next-project { grid-column: auto; }
   .section-contact { padding-bottom: 72px; }
   .contact-form { padding: 16px; }
   .contact-links { gap: 7px; }
@@ -383,3 +440,52 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
+
+/* Readable type scale: body copy sits near 16px and UI text stays comfortably legible. */
+body { font-size: 16px; }
+.brand { font-size: 15px; }
+.brand-mark { font-size: 12px; }
+.nav-link, .nav-github, .button, .mobile-nav-link { font-size: 13px; }
+.nav-resume { font-size: 12px; }
+.eyebrow, .section-eyebrow { font-size: 11px; }
+.hero-greeting { font-size: 14px; }
+.hero-description, .section-description, .about-story > p, .journey-description,
+.experience-summary, .project-summary, .skill-group > p, .building-card p,
+.lesson-card p, .beyond-copy, .detail-summary, .detail-section > p,
+.not-found-page > p:not(.section-eyebrow) { font-size: 15px; }
+.about-story > p:first-child { font-size: 17px; }
+.hero-socials a, .social-label, .hero-bottom-note, .hero-bottom-note a,
+.console-topline, .console-footer, .section-number, .focus-tile-top > span,
+.education-note span, .journey-year, .journey-detail-heading > div > p,
+.journey-detail-year, .related-line > span, .experience-topline,
+.experience-category, .project-index, .project-status, .project-kind,
+.project-tech-list span, .project-story > div > span, .project-links a,
+.skill-group li, .building-label, .lesson-number, .lesson-source,
+.beyond-card a, .github-copy > p:last-child, .contact-links a,
+.form-heading span, .footer-brand small, .footer-inner > p, .footer-links a,
+.copyright, .back-link, .detail-kicker, .detail-tech-list li, .eyebrow-small,
+.related-line strong { font-size: 12px; }
+.console-live, .console-index, .console-body .console-muted { font-size: 12px; }
+.console-body { font-size: 13px; }
+.console-body .console-value { font-size: 14px; }
+.focus-tile h3 { font-size: 17px; }
+.focus-tile p, .journey-description, .learned-box p, .experience-action p,
+.experience-learnings ul, .project-story p, .detail-status-card > p:last-child,
+.detail-next-project > p, .contact-form-note p { font-size: 14px; }
+.journey-stop-title { font-size: 13px; }
+.experience-card h3 { font-size: 20px; }
+.experience-journey-link, .project-expand, .detail-next-project > a { font-size: 13px; }
+.project-title-link > span, .project-feature-list span { font-size: 13px; }
+.project-tagline { font-size: 13px; }
+.skill-group-heading h3 { font-size: 18px; }
+.building-card h3, .lesson-card h3 { font-size: 16px; }
+.github-copy > p:last-child { font-size: 13px; }
+.contact-form label { font-size: 13px; }
+.contact-form input, .contact-form textarea { font-size: 15px; }
+.form-heading { font-size: 15px; }
+.contact-form-note h3 { font-size: 18px; }
+.footer-brand strong { font-size: 13px; }
+.detail-tagline { font-size: 16px; }
+.detail-feature-list { font-size: 13px; }
+.detail-status-card h2, .detail-next-project h2 { font-size: 18px; }
+.hero-bottom-note { flex-wrap: wrap; }
