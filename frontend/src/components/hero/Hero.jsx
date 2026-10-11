@@ -19,7 +19,7 @@ function Hero() {
       <div className="hero-copy">
         <motion.p className="eyebrow" {...reveal(0.02)}>
           <span className="status-dot" aria-hidden="true" />
-          IT engineering student · Third year
+          IT engineering student · Third year · Currently building
         </motion.p>
         <motion.p className="hero-greeting" {...reveal(0.06)}>Hello, I’m</motion.p>
         <motion.h1 id="hero-title" {...reveal(0.1)}>
@@ -28,12 +28,15 @@ function Hero() {
         <motion.p className="hero-role" {...reveal(0.15)}>
           Full-Stack Developer <span>&amp;</span> IT Engineering Student
         </motion.p>
+        <motion.p className="hero-manifesto" {...reveal(0.18)}>
+          Building practical software while becoming a better engineer.
+        </motion.p>
         <motion.p className="hero-description" {...reveal(0.2)}>
-          I build practical software, explore backend systems, and strengthen my problem-solving skills through Java, DSA, and real projects.
+          I build full-stack applications and backend systems while strengthening my problem-solving skills through Java, DSA, and real-world projects.
         </motion.p>
         <motion.div className="hero-actions" {...reveal(0.25)}>
           <a className="button button-primary" href="#projects">
-            Explore my work <ArrowDown size={16} aria-hidden="true" />
+            View my work <ArrowDown size={16} aria-hidden="true" />
           </a>
           {contactDetails.resume
             ? <a className="button button-secondary" href={contactDetails.resume} download>Download resume <ArrowUpRight size={16} aria-hidden="true" /></a>
@@ -53,23 +56,25 @@ function Hero() {
       <motion.aside className="hero-console" {...reveal(0.18)} aria-label="Current development focus">
         <div className="console-topline">
           <span className="terminal-dots" aria-hidden="true"><i /><i /><i /></span>
-          <span>BUILD LOG</span>
-          <span className="console-live"><span /> CURRENTLY BUILDING</span>
+          <span>PRINCE@PORTFOLIO</span>
+          <span className="console-live"><span /> BUILDING</span>
         </div>
         <div className="console-body">
-          <p><span className="console-prompt">$</span> whoami</p>
-          <h2>Prince Gound</h2>
-          <p className="console-muted">IT engineering student · Full-stack developer</p>
-          <div className="console-divider" />
-          <p><span className="console-prompt">$</span> focus</p>
-          <p className="console-value">MERN <span>+</span> Java <span>+</span> DSA</p>
-          <p><span className="console-prompt">$</span> building</p>
-          <p className="console-value">Practical software &amp; backend systems<span className="console-cursor" aria-hidden="true">_</span></p>
+          <p className="console-intro"><span className="console-prompt">$</span> profile --current</p>
+          <dl className="console-facts">
+            <div><dt>role</dt><dd>Full-Stack Developer</dd></div>
+            <div><dt>education</dt><dd>IT Engineering</dd></div>
+            <div><dt>focus</dt><dd>Backend + Web</dd></div>
+            <div><dt>learning</dt><dd>Java + DSA</dd></div>
+            <div><dt>building</dt><dd>Real projects</dd></div>
+            <div><dt>data</dt><dd>MongoDB + PostgreSQL</dd></div>
+          </dl>
+          <p className="console-path"><span className="console-prompt">$</span> ~/portfolio<span className="console-cursor" aria-hidden="true">_</span></p>
         </div>
         <div className="console-footer">
           <Terminal size={14} aria-hidden="true" />
-          <span>Learning by building</span>
-          <span className="console-index">01 / 09</span>
+          <span>Currently building &amp; learning</span>
+          <span className="console-index">STATUS: ACTIVE</span>
         </div>
       </motion.aside>
 

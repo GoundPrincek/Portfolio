@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import { useRef, useState } from 'react'
+import { AnimatePresence, motion, useReducedMotion, useScroll } from 'framer-motion'
 import { ArrowDownRight, ArrowUpRight, BriefcaseBusiness, Bug, Code2, GraduationCap, Presentation } from 'lucide-react'
 import { journey } from '../../data/journey.js'
 import Reveal from '../shared/Reveal.jsx'
@@ -10,6 +10,8 @@ const icons = { education: GraduationCap, building: Code2, projects: Code2, show
 function Journey() {
   const [selectedId, setSelectedId] = useState('stackfix')
   const reduceMotion = useReducedMotion()
+  const railRef = useRef(null)
+  const { scrollYProgress } = useScroll({ target: railRef, offset: ['start 76%', 'end 48%'] })
   const selected = journey.find((item) => item.id === selectedId) ?? journey[0]
   const SelectedIcon = icons[selected.category === 'Education' ? 'education' : selected.category === 'Building' ? 'building' : selected.category === 'Projects' ? 'projects' : selected.category === 'Showcase' ? 'showcase' : selected.category === 'Technical event' ? 'event' : 'internship']
 
@@ -20,7 +22,8 @@ function Journey() {
           <SectionHeading number="03" eyebrow="Learning through the work" title="My journey" description="Learning by building, breaking, debugging, and building again." id="journey-title" />
         </Reveal>
         <div className="journey-layout">
-          <div className="journey-rail" role="group" aria-label="Choose a journey milestone">
+          <div className="journey-rail" ref={railRef} role="group" aria-label="Choose a journey milestone">
+            {!reduceMotion && <motion.span className="journey-progress" aria-hidden="true" style={{ scaleY: scrollYProgress }} />}
             {journey.map((item, index) => {
               const Icon = icons[item.category === 'Education' ? 'education' : item.category === 'Building' ? 'building' : item.category === 'Projects' ? 'projects' : item.category === 'Showcase' ? 'showcase' : item.category === 'Technical event' ? 'event' : 'internship']
               const active = item.id === selectedId

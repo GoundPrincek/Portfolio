@@ -5,6 +5,7 @@ import Home from './pages/Home.jsx'
 import ProjectDetail from './pages/ProjectDetail.jsx'
 import NotFound from './pages/NotFound.jsx'
 import './App.css'
+import './theme.css'
 
 function App() {
   return (

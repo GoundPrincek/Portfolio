@@ -2,25 +2,29 @@ export const focusItems = [
   {
     number: '01',
     title: 'Building',
-    detail: 'Full-stack applications that bring practical ideas into working software.',
+    detail: 'Turning practical ideas into software people can use.',
+    items: ['Full-stack applications', 'Backend APIs', 'Real-world projects'],
     icon: 'code',
   },
   {
     number: '02',
     title: 'Learning',
-    detail: 'Express.js, PostgreSQL, Prisma, Java, and modern web development.',
+    detail: 'Strengthening the tools and fundamentals behind my projects.',
+    items: ['Java', 'DSA', 'PostgreSQL', 'Express.js'],
     icon: 'book',
   },
   {
     number: '03',
     title: 'Practicing',
-    detail: 'Data structures, algorithms, LeetCode, and debugging.',
+    detail: 'Building confidence through deliberate practice.',
+    items: ['LeetCode', 'Debugging', 'Problem solving'],
     icon: 'compass',
   },
   {
     number: '04',
     title: 'Exploring',
-    detail: 'Cloud, DevOps, Azure, Docker, Kubernetes, and developer infrastructure.',
+    detail: 'Learning how software is deployed and maintained.',
+    items: ['Azure', 'Docker', 'DevOps', 'Cloud'],
     icon: 'trending',
   },
 ]

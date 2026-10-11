@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { ArrowUpRight, Code2, Menu, X } from 'lucide-react'
+import { ArrowUpRight, Code2, Menu, Moon, Sun, X } from 'lucide-react'
 import { useLocation } from 'react-router-dom'
 import { contactDetails } from '../../data/contact.js'
 import { links } from '../../data/links.js'
@@ -16,6 +16,13 @@ const navigation = [
 function Navbar() {
   const [activeSection, setActiveSection] = useState('#home')
   const [menuOpen, setMenuOpen] = useState(false)
+  const [theme, setTheme] = useState(() => {
+    try {
+      return window.localStorage.getItem('portfolio-theme') === 'light' ? 'light' : 'dark'
+    } catch {
+      return 'dark'
+    }
+  })
   const reduceMotion = useReducedMotion()
   const { pathname } = useLocation()
   const isHome = pathname === '/'
@@ -38,6 +45,17 @@ function Navbar() {
   const closeMenu = () => setMenuOpen(false)
   const selectSection = (href) => { setActiveSection(href); closeMenu() }
   const resumeLink = contactDetails.resume
+  const nextTheme = theme === 'dark' ? 'light' : 'dark'
+  const ThemeIcon = theme === 'dark' ? Sun : Moon
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+    try {
+      window.localStorage.setItem('portfolio-theme', theme)
+    } catch {
+      // The theme still applies for this visit when browser storage is unavailable.
+    }
+  }, [theme])
 
   return (
     <header className="site-header">
@@ -55,6 +73,9 @@ function Navbar() {
               return <a className={`nav-link${activeSection === href && isHome ? ' is-active' : ''}`} href={destination} key={href} onClick={() => selectSection(href)} aria-current={activeSection === href && isHome ? 'location' : undefined}>{label}</a>
             })}
           </div>
+          <button className="theme-toggle" type="button" onClick={() => setTheme(nextTheme)} aria-label={`Switch to ${nextTheme} mode`} aria-pressed={theme === 'light'} title={`Switch to ${nextTheme} mode`}>
+            <ThemeIcon size={17} aria-hidden="true" />
+          </button>
           <a className="nav-github" href={links.github} target="_blank" rel="noreferrer"><Code2 size={16} aria-hidden="true" /><span>GitHub</span><ArrowUpRight size={14} aria-hidden="true" /></a>
           {resumeLink && <a className="nav-resume" href={resumeLink} download>Resume <ArrowUpRight size={13} aria-hidden="true" /></a>}
         </div>
@@ -66,6 +87,7 @@ function Navbar() {
                 <a className={`mobile-nav-link${isHome && activeSection === href ? ' is-active' : ''}`} href={sectionHref(href)} key={href} onClick={() => selectSection(href)} aria-current={isHome && activeSection === href ? 'location' : undefined}>{label}<ArrowUpRight size={15} aria-hidden="true" /></a>
               ))}
               <a className="mobile-nav-link mobile-github-link" href={links.github} target="_blank" rel="noreferrer">GitHub profile <ArrowUpRight size={15} aria-hidden="true" /></a>
+              <button className="mobile-nav-link mobile-theme-toggle" type="button" onClick={() => setTheme(nextTheme)}><span>{`Switch to ${nextTheme} mode`}</span><ThemeIcon size={16} aria-hidden="true" /></button>
               {resumeLink && <a className="mobile-nav-link" href={resumeLink} download>Download resume <ArrowUpRight size={15} aria-hidden="true" /></a>}
             </motion.div>
           )}

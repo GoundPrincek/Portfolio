@@ -1,5 +1,6 @@
 import Hero from '../components/hero/Hero.jsx'
 import CurrentFocus from '../components/sections/CurrentFocus.jsx'
+import DeveloperSignal from '../components/sections/DeveloperSignal.jsx'
 import About from '../components/sections/About.jsx'
 import Journey from '../components/sections/Journey.jsx'
 import Achievements from '../components/sections/Achievements.jsx'
@@ -16,6 +17,7 @@ function Home() {
     <main className="min-h-screen" id="main-content">
       <Hero />
       <CurrentFocus />
+      <DeveloperSignal />
       <About />
       <Journey />
       <Achievements />
