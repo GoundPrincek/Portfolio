@@ -8,13 +8,13 @@ import SectionHeading from '../shared/SectionHeading.jsx'
 function ProjectLinks({ project, featured = false }) {
   return (
     <div className={`project-links${featured ? ' project-links-featured' : ''}`}>
-      <Link className="project-case-link" to={`/projects/${project.id}`}>
-        {featured ? 'View case study' : 'Case study'} <ArrowRight size={15} aria-hidden="true" />
-      </Link>
+      {featured && project.live && <a href={project.live} target="_blank" rel="noreferrer"><ExternalLink size={14} aria-hidden="true" /> Live demo <ArrowUpRight size={13} aria-hidden="true" /></a>}
       <a href={project.repository} target="_blank" rel="noreferrer" aria-label={`${project.name} repository`}>
         <Code2 size={15} aria-hidden="true" /> GitHub <ArrowUpRight size={13} aria-hidden="true" />
       </a>
-      {project.live && <a href={project.live} target="_blank" rel="noreferrer"><ExternalLink size={14} aria-hidden="true" /> Demo <ArrowUpRight size={13} aria-hidden="true" /></a>}
+      {!featured && <Link className="project-case-link" to={`/projects/${project.id}`}>Case study <ArrowRight size={15} aria-hidden="true" /></Link>}
+      {!featured && project.live && <a href={project.live} target="_blank" rel="noreferrer"><ExternalLink size={14} aria-hidden="true" /> Demo <ArrowUpRight size={13} aria-hidden="true" /></a>}
+      {featured && <Link className="project-case-link" to={`/projects/${project.id}`}>Case study <ArrowRight size={15} aria-hidden="true" /></Link>}
     </div>
   )
 }
@@ -51,13 +51,14 @@ function FeaturedProject({ project, reduceMotion }) {
           <p className="featured-summary">One workspace for managing money and the everyday tasks that move personal goals forward.</p>
 
           <div className="featured-stories">
-            <div><span>The problem</span><p>{project.problem}</p></div>
-            <div><span>Built so far</span><p>{project.solution}</p></div>
-            <div><span>What I’m learning</span><p>{project.learned}</p></div>
+            <div><span>Problem</span><p>{project.problem}</p></div>
+            <div><span>Solution</span><p>{project.overview}</p></div>
+            <div><span>Architecture</span><p>React + Vite frontend · Node.js + Express.js API · MongoDB + Mongoose data layer.</p></div>
+            <div><span>My contribution</span><p>Building the salary, budget, expense, goals, tasks, and analytics flows across the React interface and modular backend.</p></div>
           </div>
 
           <div className="featured-stack">
-            <span>Stack</span>
+            <span>Tech</span>
             <ul aria-label="TrackIt technology stack">
               {['React', 'Node.js', 'Express.js', 'MongoDB'].map((technology) => <li key={technology}>{technology}</li>)}
             </ul>
@@ -111,9 +112,10 @@ function Projects() {
     <section className="section-block section-projects" id="projects" aria-labelledby="projects-title">
       <div className="page-shell">
         <Reveal>
-          <SectionHeading number="05" eyebrow="Ideas, decisions, and working software" title="Projects with a story" description="One featured build, then three different problem spaces I’m exploring through software." id="projects-title" />
+          <SectionHeading number="03" eyebrow="Ideas, decisions, and working software" title="Featured project" description="A closer look at the problem, product decisions, and engineering behind TrackIt." id="projects-title" />
         </Reveal>
         {featured && <FeaturedProject project={featured} reduceMotion={reduceMotion} />}
+        <Reveal><h3 className="projects-support-title">Other projects</h3></Reveal>
         <div className="projects-support-grid" aria-label="More projects">
           {supporting.map((project) => <SupportingProject key={project.id} project={project} reduceMotion={reduceMotion} />)}
         </div>

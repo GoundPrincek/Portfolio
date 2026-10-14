@@ -1,4 +1,4 @@
-import { ArrowUpRight, Code2, Mail, Send } from 'lucide-react'
+import { ArrowUpRight, Code2, FileText, Mail, Send } from 'lucide-react'
 import { contactDetails } from '../../data/contact.js'
 import { links } from '../../data/links.js'
 import Reveal from '../shared/Reveal.jsx'
@@ -20,8 +20,9 @@ function Contact() {
     <section className="section-block section-contact" id="contact" aria-labelledby="contact-title">
       <div className="page-shell contact-layout">
         <Reveal>
-          <SectionHeading number="09" eyebrow="Good things start with a conversation" title="Have an idea, opportunity, or project in mind?" description="I’m open to interesting projects, internship opportunities, and conversations about building useful software." id="contact-title" />
+          <SectionHeading number="08" eyebrow="Good things start with a conversation" title="Let’s connect" description="For internship opportunities, project ideas, or a conversation about building useful software." id="contact-title" />
           <div className="contact-links">
+            {contactDetails.resume && <a href={contactDetails.resume} download><FileText size={16} aria-hidden="true" /> Resume <ArrowUpRight size={14} aria-hidden="true" /></a>}
             <a href={links.github} target="_blank" rel="noreferrer"><Code2 size={16} aria-hidden="true" /> GitHub <ArrowUpRight size={14} aria-hidden="true" /></a>
             <a href={links.linkedin} target="_blank" rel="noreferrer"><span className="linkedin-mark" aria-hidden="true">in</span> LinkedIn <ArrowUpRight size={14} aria-hidden="true" /></a>
             {contactDetails.email && <a href={`mailto:${contactDetails.email}`}><Mail size={16} aria-hidden="true" /> Email <ArrowUpRight size={14} aria-hidden="true" /></a>}

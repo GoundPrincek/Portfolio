@@ -7,9 +7,9 @@ import { links } from '../../data/links.js'
 
 const navigation = [
   { label: 'About', href: '#about' },
-  { label: 'Journey', href: '#journey' },
   { label: 'Projects', href: '#projects' },
   { label: 'Skills', href: '#skills' },
+  { label: 'Journey', href: '#journey' },
   { label: 'Contact', href: '#contact' },
 ]
 
@@ -36,7 +36,7 @@ function Navbar() {
         if (entry.isIntersecting) setActiveSection(`#${entry.target.id}`)
       })
     }, { rootMargin: '-27% 0px -66% 0px', threshold: 0 })
-    const sections = ['home', 'about', 'journey', 'experience', 'projects', 'skills', 'contact']
+    const sections = ['home', 'focus', 'about', 'projects', 'skills', 'journey', 'building', 'github', 'contact']
       .map((id) => document.getElementById(id)).filter(Boolean)
     sections.forEach((section) => observer.observe(section))
     return () => observer.disconnect()

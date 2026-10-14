@@ -36,20 +36,10 @@ function Hero() {
         </motion.p>
         <motion.div className="hero-actions" {...reveal(0.25)}>
           <a className="button button-primary" href="#projects">
-            View my work <ArrowDown size={16} aria-hidden="true" />
+            View Projects <ArrowDown size={16} aria-hidden="true" />
           </a>
-          {contactDetails.resume
-            ? <a className="button button-secondary" href={contactDetails.resume} download>Download resume <ArrowUpRight size={16} aria-hidden="true" /></a>
-            : <a className="button button-secondary" href={links.linkedin} target="_blank" rel="noreferrer">Let’s connect <ArrowUpRight size={16} aria-hidden="true" /></a>}
-        </motion.div>
-        <motion.div className="hero-socials" {...reveal(0.3)} aria-label="Social profiles">
-          <span className="social-label">Find me on</span>
-          <a href={links.github} target="_blank" rel="noreferrer" aria-label="GitHub profile">
-            <Code2 size={17} aria-hidden="true" /><span>GitHub</span><ArrowUpRight size={13} aria-hidden="true" />
-          </a>
-          <a href={links.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn profile">
-            <span className="linkedin-mark" aria-hidden="true">in</span><span>LinkedIn</span><ArrowUpRight size={13} aria-hidden="true" />
-          </a>
+          <a className="button button-secondary" href={links.github} target="_blank" rel="noreferrer"><Code2 size={15} aria-hidden="true" /> GitHub <ArrowUpRight size={15} aria-hidden="true" /></a>
+          {contactDetails.resume && <a className="button button-secondary" href={contactDetails.resume} download>Resume <ArrowUpRight size={15} aria-hidden="true" /></a>}
         </motion.div>
       </div>
 

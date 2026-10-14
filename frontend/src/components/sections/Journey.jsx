@@ -19,7 +19,7 @@ function Journey() {
     <section className="section-block section-journey" id="journey" aria-labelledby="journey-title">
       <div className="page-shell">
         <Reveal>
-          <SectionHeading number="03" eyebrow="Learning through the work" title="My journey" description="Learning by building, breaking, debugging, and building again." id="journey-title" />
+          <SectionHeading number="05" eyebrow="Internship · project showcase · debugging competition" title="Journey & experience" description="Three experiences shaping how I communicate, present my work, and solve problems." id="journey-title" />
         </Reveal>
         <div className="journey-layout">
           <div className="journey-rail" ref={railRef} role="group" aria-label="Choose a journey milestone">
