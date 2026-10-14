@@ -2,7 +2,32 @@
 
 > **Full-Stack Developer & IT Engineering Student**
 
-My personal developer portfolio showcasing my **projects, skills, learning journey, experience, and development work**.
+My personal portfolio showcasing my **projects, skills, learning journey, experience, and development work**.
+
+## Live Portfolio
+
+**Visit:**  
+https://portfolio-dun-rho-2buhpe6319.vercel.app/
+
+## About
+
+This portfolio represents my journey as an IT Engineering student and developer. It highlights the projects I build, technologies I work with, and the areas I am currently learning and exploring.
+
+My current focus includes:
+
+- Full-Stack Web Development
+- React.js & Node.js
+- REST API Development
+- Java & DSA
+- PostgreSQL & Databases
+- Cloud & DevOps fundamentals
+
+## Featured Projects
+
+- **TrackIt** — Personal Finance & Productivity Tracker
+- **DrishyaManch** — Video Sharing & Content Platform
+- **SOS Setu** — Emergency & Disaster Technology Project
+- **VayuDrishti** — Technology & Hardware Project
 
 ## Tech Stack
 
@@ -20,28 +45,20 @@ My personal developer portfolio showcasing my **projects, skills, learning journ
 - PostgreSQL
 - Prisma
 
-**Tools**
-- Git
-- GitHub
+**Other**
+- Java
+- Git & GitHub
+- REST APIs
 - VS Code
 
-## Featured Projects
-
-- **TrackIt** — Personal Finance & Productivity Tracker
-- **DrishyaManch** — Video Sharing & Content Platform
-- **SOS Setu** — Emergency/Disaster Technology Project
-- **VayuDrishti** — Technology & Hardware Project
-
 ## Run Locally
-
-### 1. Clone the repository
 
 ```bash
 git clone https://github.com/GoundPrincek/Portfolio.git
 cd Portfolio
 ```
 
-### 2. Start Frontend
+### Frontend
 
 ```bash
 cd frontend
@@ -55,7 +72,7 @@ Open:
 http://localhost:5173
 ```
 
-### 3. Start Backend
+### Backend
 
 Open another terminal:
 
@@ -65,7 +82,7 @@ npm install
 npm run dev
 ```
 
-> Backend environment variables may be required depending on the current implementation.
+> Configure the required environment variables before starting the backend.
 
 ## Project Structure
 
@@ -78,8 +95,9 @@ Portfolio/
 
 ## Connect
 
-- **GitHub:** https://github.com/GoundPrincek
-- **LinkedIn:** https://www.linkedin.com/in/goundprincek/
+- GitHub: https://github.com/GoundPrincek
+- LinkedIn: https://www.linkedin.com/in/goundprincek/
+- Portfolio: https://portfolio-dun-rho-2buhpe6319.vercel.app/
 
 ## Author
 
