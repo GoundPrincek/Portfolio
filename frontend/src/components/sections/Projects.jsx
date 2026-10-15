@@ -32,15 +32,15 @@ function FeaturedProject({ project, reduceMotion }) {
       >
         {project.imageUrl ? (
           <img className="featured-project-image" src={project.imageUrl} alt={`${project.name} project screenshot`} loading="lazy" />
-        ) : <div className="featured-map" role="img" aria-label={`${project.name} system map connecting its main workflows`}>
-          <div className="featured-map-topline"><span>{project.name.toUpperCase()} / SYSTEM MAP</span><span>01 — FEATURED</span></div>
+        ) : <div className="featured-map" role="img" aria-label={`${project.name} overview with selected project features`}>
+          <div className="featured-map-topline"><span>{project.name.toUpperCase()} / FEATURE OVERVIEW</span><span>01 — FEATURED</span></div>
           <div className="featured-map-core">
             <span className="featured-map-orbit featured-map-orbit-one" aria-hidden="true" />
             <span className="featured-map-orbit featured-map-orbit-two" aria-hidden="true" />
             <div className="featured-map-center"><span>FEATURED</span><b>+</b><span>{project.name.toUpperCase()}</span></div>
             {project.features.slice(0, 3).map((feature, index) => <span className={`map-node map-node-${['plan', 'track', 'do'][index]}`} key={feature}>{feature}</span>)}
           </div>
-          <div className="featured-map-caption"><span>One workspace</span><span className="map-caption-line" aria-hidden="true" /><span>Connected routines</span></div>
+          <div className="featured-map-caption"><span>Project highlights</span><span className="map-caption-line" aria-hidden="true" /><span>Selected features</span></div>
         </div>}
 
         <div className="featured-copy">
@@ -55,7 +55,7 @@ function FeaturedProject({ project, reduceMotion }) {
 
           <div className="featured-stories">
             <div><span>Problem</span><p>{project.problem}</p></div>
-            <div><span>Solution</span><p>{project.overview}</p></div>
+            <div><span>Solution</span><p>{project.solution}</p></div>
             <div><span>Architecture</span><p>{project.architecture}</p></div>
             {project.contribution && <div><span>My contribution</span><p>{project.contribution}</p></div>}
           </div>
@@ -73,7 +73,7 @@ function FeaturedProject({ project, reduceMotion }) {
   )
 }
 
-function SupportingProject({ project, reduceMotion }) {
+function SupportingProject({ project, reduceMotion, total }) {
   const isWide = project.id === 'vayudrishti'
 
   return (
@@ -85,7 +85,7 @@ function SupportingProject({ project, reduceMotion }) {
       >
         <div className="project-support-main">
           <div className="project-card-header">
-            <span className="project-index">{project.index} <span>/ 04</span></span>
+            <span className="project-index">{project.index} <span>/ {String(total).padStart(2, '0')}</span></span>
             <span className="project-status"><i />{project.status}</span>
           </div>
           <p className="project-kind">{project.kind}</p>
@@ -124,7 +124,7 @@ function Projects() {
         {featured && <FeaturedProject project={featured} reduceMotion={reduceMotion} />}
         {supporting.length > 0 && <><Reveal><h3 className="projects-support-title">Other projects</h3></Reveal>
           <div className="projects-support-grid" aria-label="More projects">
-            {supporting.map((project) => <SupportingProject key={project.id} project={project} reduceMotion={reduceMotion} />)}
+            {supporting.map((project) => <SupportingProject key={project.id} project={project} reduceMotion={reduceMotion} total={sortedProjects.length} />)}
           </div></>}
         </>}
       </div>

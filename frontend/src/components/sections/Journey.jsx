@@ -43,7 +43,7 @@ function Journey() {
     <section className="section-block section-journey" id="journey" aria-labelledby="journey-title">
       <div className="page-shell">
         <Reveal>
-          <SectionHeading number="05" eyebrow="Internship · project showcase · debugging competition" title="Journey & experience" description="Three experiences shaping how I communicate, present my work, and solve problems." id="journey-title" />
+          <SectionHeading number="05" eyebrow="Internship · project showcase · debugging competition" title="Journey & experience" description="Internship, project showcases, and technical events shaping how I communicate and solve problems." id="journey-title" />
         </Reveal>
         <ResourceState status={status} error={error} retry={retry} label="journey items" />
         {status !== 'empty' && <div className="journey-layout">

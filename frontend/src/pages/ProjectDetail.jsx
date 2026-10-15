@@ -57,9 +57,10 @@ function ProjectDetail() {
     if (loadState === 'loading') return <main className="detail-page page-shell" id="main-content"><p role="status">Loading project…</p></main>
     return (
       <main className="detail-page not-found-page page-shell" id="main-content">
-        <p className="section-eyebrow">404 · Project not found</p>
-        <h1>This project page isn’t here.</h1>
-        <p>Head back to the project list to browse the work currently featured on this portfolio.</p>
+        {loadState === 'error' && <ResourceState status={loadState} error={loadError} retry={() => { setLoadState('loading'); setRetryCount((count) => count + 1) }} label="project details" />}
+        <p className="section-eyebrow">{loadState === 'error' ? 'Project details unavailable' : '404 · Project not found'}</p>
+        <h1>{loadState === 'error' ? 'This project could not be loaded.' : 'This project page isn’t here.'}</h1>
+        <p>{loadState === 'error' ? 'Check your connection and try again, or return to the project list.' : 'Head back to the project list to browse the work currently featured on this portfolio.'}</p>
         <Link className="button button-primary" to="/#projects"><ArrowLeft size={15} aria-hidden="true" /> View projects</Link>
       </main>
     )
@@ -71,7 +72,7 @@ function ProjectDetail() {
       <Reveal>
         <Link className="back-link" to="/#projects"><ArrowLeft size={14} aria-hidden="true" /> Back to all projects</Link>
         <div className="detail-hero">
-          <div className="detail-kicker"><span>{project.index} / {String(projects.length).padStart(2, '0')}</span><span className="project-status"><i />{project.status}</span><span>{project.kind}</span></div>
+          <div className="detail-kicker"><span>PROJECT CASE STUDY</span><span className="project-status"><i />{project.status}</span><span>{project.kind}</span></div>
           <h1>{project.name} {project.localName && <span>{project.localName}</span>}</h1>
           {project.tagline && <p className="detail-tagline">{project.tagline}</p>}
           <p className="detail-summary">{project.summary}</p>

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict'
 import bcrypt from 'bcryptjs'
 import request from 'supertest'
 import { createApp } from '../src/app.js'
+import { openApiSpec } from '../src/openapi.js'
 
 const secret = 'test-only-secret-with-at-least-thirty-two-characters'
 const password = 'portfolio-admin-password-2026'
@@ -65,6 +66,24 @@ test('API validation, public reads, contact persistence, auth, admin CRUD, and e
     const missing = await request(app).get('/api/not-a-route').expect(404)
     assert.equal(missing.body.success, false)
     assert.equal(missing.body.error, 'NOT_FOUND')
+    const docs = await request(app).get('/api/docs/').expect(200)
+    assert.match(docs.headers['content-type'], /text\/html/)
+    assert.equal(docs.headers['content-security-policy'], undefined)
+  })
+
+  await t.test('documents every public endpoint and references valid local schemas', () => {
+    for (const path of ['/health', '/projects', '/projects/{id}', '/skills', '/experience', '/education', '/achievements', '/contact', '/github/profile', '/github/repos', '/auth/login', '/auth/logout', '/auth/me', '/admin/overview', '/admin/messages']) {
+      assert.ok(openApiSpec.paths[path], `OpenAPI should document ${path}`)
+    }
+    const visit = (value) => {
+      if (!value || typeof value !== 'object') return
+      if (typeof value.$ref === 'string' && value.$ref.startsWith('#/')) {
+        const resolved = value.$ref.slice(2).split('/').reduce((parent, key) => parent?.[key], openApiSpec)
+        assert.ok(resolved, `OpenAPI reference ${value.$ref} should resolve`)
+      }
+      Object.values(value).forEach(visit)
+    }
+    visit(openApiSpec)
   })
 
   await t.test('rejects invalid contact fields and stores a valid message', async () => {

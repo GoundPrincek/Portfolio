@@ -2,6 +2,7 @@ const text = { type: 'string' }
 const url = { type: 'string', format: 'uri' }
 const list = { type: 'array', items: text }
 const adminSecurity = [{ AdminCookie: [] }]
+const nullData = { type: 'object', nullable: true }
 const response = (schema, description) => ({ description, content: { 'application/json': { schema } } })
 const envelope = (schema) => ({ type: 'object', required: ['success', 'message', 'data'], properties: { success: { type: 'boolean', example: true }, message: text, data: schema } })
 const array = (schema) => ({ type: 'array', items: schema })
@@ -30,11 +31,11 @@ const schemas = {
 const unauthorized = response({ $ref: '#/components/schemas/Error' }, 'Admin sign-in required.')
 const validationError = response({ $ref: '#/components/schemas/Error' }, 'Request fields failed validation.')
 const paths = {
-  '/health': { get: { tags: ['Health'], summary: 'Check API and PostgreSQL connectivity', responses: { 200: response(envelope(record({ status: text, database: text })), 'Service and database are healthy.'), 503: response(envelope(record({ status: text, database: text })), 'Database is unavailable.') } } },
+  '/health': { get: { tags: ['Health'], summary: 'Check API and PostgreSQL connectivity', responses: { 200: response(envelope(record({ status: text, database: text })), 'Service and database are healthy.'), 503: response(record({ success: { type: 'boolean', example: false }, message: text, error: text, data: record({ status: text, database: text }) }), 'Database is unavailable.') } } },
   '/auth/login': { post: { tags: ['Authentication'], summary: 'Sign in as the portfolio admin', requestBody: { required: true, content: { 'application/json': { schema: { $ref: '#/components/schemas/LoginRequest' } } } }, responses: { 200: response(envelope(record({ user: record({ id: text, name: text, email: { type: 'string', format: 'email' }, role: text }) })), 'Signed in; sets an HttpOnly cookie.'), 400: validationError, 401: response({ $ref: '#/components/schemas/Error' }, 'Email or password is incorrect.') } } },
-  '/auth/logout': { post: { tags: ['Authentication'], summary: 'Clear the admin cookie', responses: { 200: response(envelope({ type: 'null' }), 'Signed out.') } } },
+  '/auth/logout': { post: { tags: ['Authentication'], summary: 'Clear the admin cookie', responses: { 200: response(envelope(nullData), 'Signed out.') } } },
   '/auth/me': { get: { tags: ['Authentication'], summary: 'Read the current admin session', security: adminSecurity, responses: { 200: response(envelope(record({ user: record({ id: text, email: { type: 'string', format: 'email' }, role: text }) })), 'Current owner session.'), 401: unauthorized } } },
-  '/contact': { post: { tags: ['Contact'], summary: 'Validate and save a contact message', requestBody: { required: true, content: { 'application/json': { schema: { $ref: '#/components/schemas/ContactRequest' } } } }, responses: { 201: response(envelope({ type: 'null' }), 'Message saved for owner review.'), 400: validationError, 429: response({ $ref: '#/components/schemas/Error' }, 'Contact rate limit reached.') } } },
+  '/contact': { post: { tags: ['Contact'], summary: 'Validate and save a contact message', requestBody: { required: true, content: { 'application/json': { schema: { $ref: '#/components/schemas/ContactRequest' } } } }, responses: { 201: response(envelope(nullData), 'Message saved for owner review.'), 400: validationError, 429: response({ $ref: '#/components/schemas/Error' }, 'Contact rate limit reached.') } } },
   '/github/profile': { get: { tags: ['GitHub'], summary: 'Read the cached public GitHub profile', responses: { 200: response(envelope(record({ username: text, name: text, avatarUrl: url, url, bio: text, publicRepos: { type: 'integer' } })), 'Public profile details.'), 502: response({ $ref: '#/components/schemas/Error' }, 'GitHub is unavailable.') } } },
   '/github/repos': { get: { tags: ['GitHub'], summary: 'Read cached selected portfolio repositories', responses: { 200: response(envelope(array(record({ name: text, fullName: text, description: text, url, language: text, stars: { type: 'integer' }, updatedAt: { type: 'string', format: 'date-time' } }))), 'Only repositories linked from projects are returned.') } } },
   '/admin/overview': { get: { tags: ['Admin'], summary: 'Get dashboard content and message counts', security: adminSecurity, responses: { 200: response(envelope(record({ projects: { type: 'integer' }, skills: { type: 'integer' }, experience: { type: 'integer' }, education: { type: 'integer' }, achievements: { type: 'integer' }, messages: { type: 'integer' }, newMessages: { type: 'integer' } })), 'Dashboard overview.'), 401: unauthorized } } },
@@ -47,16 +48,59 @@ const itemSchemas = { projects: 'Project', skills: 'SkillInput', experience: 'Ex
 
 for (const [collection, inputSchema] of Object.entries(itemInputs)) {
   const tag = collection[0].toUpperCase() + collection.slice(1)
+  const outputSchema = itemSchemas[collection]
+  const inputReference = { $ref: `#/components/schemas/${inputSchema}` }
+  const outputReference = { $ref: `#/components/schemas/${outputSchema}` }
+
   paths[`/${collection}`] = {
-    get: { tags: [tag], summary: `List public ${collection}`, responses: { 200: response(envelope(array({ $ref: `#/components/schemas/${itemSchemas[collection]}` })), `${collection} in display order.`) } },
-    post: { tags: [tag], summary: `Create a ${collection.slice(0, -1)} (admin)`, security: adminSecurity, requestBody: { required: true, content: { 'application/json': { schema: { $ref: `#/components/schemas/${inputSchema}` } } }, responses: { 201: response(envelope({ $ref: `#/components/schemas/${itemSchemas[collection]}` }), 'Record created.'), 400: validationError, 401: unauthorized } },
+    get: {
+      tags: [tag],
+      summary: `List public ${collection}`,
+      responses: { 200: response(envelope(array(outputReference)), `${collection} in display order.`) },
+    },
+    post: {
+      tags: [tag],
+      summary: `Create a ${collection.slice(0, -1)} (admin)`,
+      security: adminSecurity,
+      requestBody: { required: true, content: { 'application/json': { schema: inputReference } } },
+      responses: { 201: response(envelope(outputReference), 'Record created.'), 400: validationError, 401: unauthorized },
+    },
   }
+
   paths[`/${collection}/{id}`] = {
-    ...(collection === 'projects' ? { get: { tags: [tag], summary: 'Get a public project case study by slug', parameters: [{ name: 'id', in: 'path', required: true, description: 'Project slug.', schema: text }], responses: { 200: response(envelope({ $ref: '#/components/schemas/Project' }), 'Project detail.'), 404: response({ $ref: '#/components/schemas/Error' }, 'Project not found.') } } } : {}),
-    put: { tags: [tag], summary: `Update ${collection} item (admin)`, security: adminSecurity, parameters: [{ name: 'id', in: 'path', required: true, description: 'Database record ID.', schema: text }], requestBody: { required: true, content: { 'application/json': { schema: { $ref: `#/components/schemas/${inputSchema}` } } }, responses: { 200: response(envelope({ $ref: `#/components/schemas/${itemSchemas[collection]}` }), 'Record updated.'), 400: validationError, 401: unauthorized, 404: response({ $ref: '#/components/schemas/Error' }, 'Record not found.') } },
-    delete: { tags: [tag], summary: `Delete ${collection} item (admin)`, security: adminSecurity, parameters: [{ name: 'id', in: 'path', required: true, description: 'Database record ID.', schema: text }], responses: { 200: response(envelope({ type: 'null' }), 'Record deleted.'), 401: unauthorized, 404: response({ $ref: '#/components/schemas/Error' }, 'Record not found.') } },
+    ...(collection === 'projects' ? {
+      get: {
+        tags: [tag],
+        summary: 'Get a public project case study by slug',
+        parameters: [{ name: 'id', in: 'path', required: true, description: 'Project slug.', schema: text }],
+        responses: { 200: response(envelope({ $ref: '#/components/schemas/Project' }), 'Project detail.'), 404: response({ $ref: '#/components/schemas/Error' }, 'Project not found.') },
+      },
+    } : {}),
+    put: {
+      tags: [tag],
+      summary: `Update ${collection} item (admin)`,
+      security: adminSecurity,
+      parameters: [{ name: 'id', in: 'path', required: true, description: 'Database record ID.', schema: text }],
+      requestBody: { required: true, content: { 'application/json': { schema: inputReference } } },
+      responses: { 200: response(envelope(outputReference), 'Record updated.'), 400: validationError, 401: unauthorized, 404: response({ $ref: '#/components/schemas/Error' }, 'Record not found.') },
+    },
+    delete: {
+      tags: [tag],
+      summary: `Delete ${collection} item (admin)`,
+      security: adminSecurity,
+      parameters: [{ name: 'id', in: 'path', required: true, description: 'Database record ID.', schema: text }],
+      responses: { 200: response(envelope(nullData), 'Record deleted.'), 401: unauthorized, 404: response({ $ref: '#/components/schemas/Error' }, 'Record not found.') },
+    },
   }
-  paths[`/admin/${collection}`] = { get: { tags: ['Admin', tag], summary: `List ${collection} for the CMS`, security: adminSecurity, responses: { 200: response(envelope(array({ $ref: `#/components/schemas/${inputSchema}` })), 'Management records, including private fields.') , 401: unauthorized } } }
+
+  paths[`/admin/${collection}`] = {
+    get: {
+      tags: ['Admin', tag],
+      summary: `List ${collection} for the CMS`,
+      security: adminSecurity,
+      responses: { 200: response(envelope(array(outputReference)), 'Management records.'), 401: unauthorized },
+    },
+  }
 }
 
 export const openApiSpec = {

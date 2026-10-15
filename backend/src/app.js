@@ -23,7 +23,9 @@ export function createApp({ prisma, jwtSecret, clientUrl = '', githubUsername = 
   app.locals.github = { username: githubUsername, token: githubToken }
 
   app.use(helmet())
-  const allowedOrigins = clientUrl.split(',').map((origin) => origin.trim()).filter(Boolean)
+  const allowedOrigins = clientUrl.split(',').map((origin) => {
+    try { return new URL(origin.trim()).origin } catch { return '' }
+  }).filter(Boolean)
   if (!isProduction) allowedOrigins.push('http://localhost:5173', 'http://127.0.0.1:5173')
   app.use(cors({
     credentials: true,
@@ -44,7 +46,7 @@ export function createApp({ prisma, jwtSecret, clientUrl = '', githubUsername = 
     customLogLevel(_req, res, error) { return error || res.statusCode >= 500 ? 'error' : res.statusCode >= 400 ? 'warn' : 'info' },
   }))
   app.get('/', (_req, res) => res.json({ service: 'portfolio-api', docs: '/api/docs', health: '/api/health' }))
-  app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(openApiSpec, { explorer: true }))
+  app.use('/api/docs', (_req, res, next) => { res.removeHeader('Content-Security-Policy'); next() }, swaggerUi.serve, swaggerUi.setup(openApiSpec, { explorer: true }))
   app.use('/api', createApiRouter({ adminAuth: requireAdmin({ secret: jwtSecret }) }))
   app.use(notFound)
   app.use(errorHandler)

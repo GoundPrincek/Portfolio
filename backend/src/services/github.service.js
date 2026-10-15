@@ -35,7 +35,7 @@ export function getGitHubRepos(username, token, selectedNames) {
   const selected = new Set(selectedNames.map((name) => name.toLowerCase()))
   return cached(`repos:${username}`, async () => {
     const repos = await githubFetch(`/users/${encodeURIComponent(username)}/repos?sort=updated&per_page=100&type=owner`, token)
-    return repos.filter((repo) => selected.has(repo.name.toLowerCase())).map(({ name, full_name, description, html_url, language, stargazers_count, updated_at }) => ({
+    return repos.filter((repo) => !repo.private && selected.has(repo.name.toLowerCase())).map(({ name, full_name, description, html_url, language, stargazers_count, updated_at }) => ({
       name, fullName: full_name, description, url: html_url, language, stars: stargazers_count, updatedAt: updated_at,
     }))
   })

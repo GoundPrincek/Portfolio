@@ -23,6 +23,11 @@ jobs:
         run: npm ci --prefix backend
       - name: Generate Prisma client
         run: npm --prefix backend run db:generate
+      - name: Validate Prisma schema
+        working-directory: backend
+        env:
+          DATABASE_URL: postgresql://ci:ci@localhost:5432/portfolio?schema=public
+        run: npx prisma validate
       - name: Check backend syntax
         run: npm --prefix backend run lint
       - name: Test API behavior

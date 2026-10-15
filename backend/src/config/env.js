@@ -5,7 +5,13 @@ const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   PORT: z.coerce.number().int().min(1).max(65535).default(3000),
   DATABASE_URL: z.string().url().refine((value) => value.startsWith('postgresql://') || value.startsWith('postgres://'), 'DATABASE_URL must point to PostgreSQL.'),
-  CLIENT_URL: z.string().url().optional(),
+  CLIENT_URL: z.string().optional().refine((value) => {
+    if (!value) return true
+    return value.split(',').every((entry) => {
+      const origin = entry.trim()
+      try { return new URL(origin).origin === origin.replace(/\/$/, '') } catch { return false }
+    })
+  }, 'CLIENT_URL must contain one or more frontend origins.'),
   JWT_SECRET: z.string().min(32, 'JWT_SECRET must contain at least 32 characters'),
   GITHUB_USERNAME: z.string().min(1).default('GoundPrincek'),
   GITHUB_TOKEN: z.string().optional(),

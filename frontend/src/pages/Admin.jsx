@@ -209,7 +209,7 @@ function AdminCollection({ collection, newItem }) {
           <div className="admin-fields-grid">{formFields.map(([name, label, type]) => <label className={type === 'textarea' || type === 'list' ? 'admin-field-wide' : ''} key={name}>{label}
             {type === 'textarea' || type === 'list' ? <textarea rows={type === 'list' ? 4 : 3} value={form[name] ?? ''} onChange={(event) => setForm({ ...form, [name]: event.target.value })} required={['shortDescription', 'description', 'problem', 'solution', 'architecture'].includes(name)} /> :
               type === 'checkbox' ? <span className="admin-checkbox"><input type="checkbox" checked={Boolean(form[name])} onChange={(event) => setForm({ ...form, [name]: event.target.checked })} /> Featured on the homepage</span> :
-                <input type={type} value={form[name] ?? ''} onChange={(event) => setForm({ ...form, [name]: event.target.value })} required={['title', 'slug', 'name', 'category', 'institution', 'degree', 'field', 'githubUrl', 'shortDescription', 'description', 'problem', 'solution', 'architecture', 'kind', 'status'].includes(name)} />}
+                <input type={type} value={form[name] ?? ''} onChange={(event) => setForm({ ...form, [name]: event.target.value })} required={['title', 'slug', 'name', 'category', 'level', 'organization', 'period', 'institution', 'degree', 'field', 'githubUrl', 'shortDescription', 'description', 'problem', 'solution', 'architecture', 'kind', 'status'].includes(name)} />}
           </label>)}</div>
           <button className="button button-primary" type="submit" disabled={busy}><Save size={15} /> {busy ? 'Saving…' : 'Save changes'}</button>
         </form>

@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
 import Navbar from './components/navbar/Navbar.jsx'
 import Footer from './components/sections/Footer.jsx'
@@ -16,6 +16,25 @@ const AdminPage = lazy(() => loadAdminModule().then((module) => ({ default: modu
 function AppRoutes() {
   const location = useLocation()
   const isAdmin = location.pathname.startsWith('/admin')
+
+  useEffect(() => {
+    if (!isAdmin) return undefined
+    document.title = 'Portfolio Admin | Prince Gound'
+    let robots = document.querySelector('meta[name="robots"]')
+    const createdRobots = !robots
+    if (!robots) {
+      robots = document.createElement('meta')
+      robots.name = 'robots'
+      document.head.appendChild(robots)
+    }
+    const previousRobots = robots.content
+    robots.content = 'noindex, nofollow'
+    return () => {
+      if (createdRobots) robots.remove()
+      else robots.content = previousRobots
+      if (document.title === 'Portfolio Admin | Prince Gound') document.title = 'Prince Gound | Full-Stack Developer & IT Engineering Student'
+    }
+  }, [isAdmin])
 
   return (
     <>

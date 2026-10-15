@@ -62,7 +62,7 @@ The Vite development server proxies `/api` to `http://localhost:3000`. Open `htt
 | --- | --- | --- |
 | `DATABASE_URL` | Backend | PostgreSQL connection string; never expose to Vite |
 | `PORT` | Backend | API listening port (default `3000`) |
-| `CLIENT_URL` | Backend | Exact frontend origin allowed by credentialed CORS |
+| `CLIENT_URL` | Backend | One or more comma-separated frontend origins allowed by credentialed CORS |
 | `JWT_SECRET` | Backend | Random signing key, at least 32 characters |
 | `GITHUB_USERNAME` | Backend | Public account used for GitHub profile/repository reads |
 | `GITHUB_TOKEN` | Backend | Optional GitHub API token to raise the API rate limit |
