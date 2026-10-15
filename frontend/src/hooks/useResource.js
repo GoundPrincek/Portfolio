@@ -14,7 +14,7 @@ export function useResource(loader, fallback = []) {
       const value = items ?? []
       setData(value)
       setError('')
-      setStatus(value.length ? 'success' : 'empty')
+      setStatus((Array.isArray(value) ? value.length > 0 : Boolean(value)) ? 'success' : 'empty')
     }).catch((reason) => {
       if (!active) return
       setError(reason.message || 'Unable to load this content.')

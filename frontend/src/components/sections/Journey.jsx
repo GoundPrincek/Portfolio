@@ -36,7 +36,8 @@ function Journey() {
   const { scrollYProgress } = useScroll({ target: railRef, offset: ['start 76%', 'end 48%'] })
   const selected = data.find((item) => item.id === selectedId) ?? data.find((item) => item.title.toLowerCase().includes('stackfix')) ?? data[0]
   if (!selected) return null
-  const SelectedIcon = icons[selected.category === 'Education' ? 'education' : selected.category === 'Building' ? 'building' : selected.category === 'Projects' ? 'projects' : selected.category === 'Showcase' ? 'showcase' : selected.category === 'Technical event' ? 'event' : 'internship']
+  const selectedCategory = selected.category.toLowerCase()
+  const SelectedIcon = icons[selectedCategory.includes('education') ? 'education' : selectedCategory.includes('building') ? 'building' : selectedCategory.includes('project') ? 'projects' : selectedCategory.includes('showcase') ? 'showcase' : selectedCategory.includes('technical') || selectedCategory.includes('competition') ? 'event' : 'internship']
 
   return (
     <section className="section-block section-journey" id="journey" aria-labelledby="journey-title">
@@ -72,7 +73,7 @@ function Journey() {
           <div className="journey-detail-wrap" id="journey-detail" aria-live="polite" aria-atomic="true">
             <AnimatePresence mode="wait">
               <motion.article
-                className={`journey-detail${selected.id === 'stackfix' ? ' is-debugging' : ''}`}
+                className={`journey-detail${selected.title.toLowerCase().includes('stackfix') ? ' is-debugging' : ''}`}
                 key={selected.id}
                 initial={reduceMotion ? false : { opacity: 0, y: 9 }}
                 animate={{ opacity: 1, y: 0 }}

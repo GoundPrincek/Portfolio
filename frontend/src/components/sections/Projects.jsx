@@ -37,17 +37,15 @@ function FeaturedProject({ project, reduceMotion }) {
           <div className="featured-map-core">
             <span className="featured-map-orbit featured-map-orbit-one" aria-hidden="true" />
             <span className="featured-map-orbit featured-map-orbit-two" aria-hidden="true" />
-            <div className="featured-map-center"><span>FINANCE</span><b>+</b><span>FOCUS</span></div>
-            <span className="map-node map-node-plan">Plan<small>salary · budget</small></span>
-            <span className="map-node map-node-track">Track<small>expenses · goals</small></span>
-            <span className="map-node map-node-do">Follow through<small>todos · reminders</small></span>
+            <div className="featured-map-center"><span>FEATURED</span><b>+</b><span>{project.name.toUpperCase()}</span></div>
+            {project.features.slice(0, 3).map((feature, index) => <span className={`map-node map-node-${['plan', 'track', 'do'][index]}`} key={feature}>{feature}</span>)}
           </div>
           <div className="featured-map-caption"><span>One workspace</span><span className="map-caption-line" aria-hidden="true" /><span>Connected routines</span></div>
         </div>}
 
         <div className="featured-copy">
           <div className="project-card-header">
-            <span className="featured-overline">A practical product in progress</span>
+            <span className="featured-overline">FEATURED PROJECT</span>
             <span className="project-status status-active"><i />{project.status}</span>
           </div>
           <p className="project-kind">{project.kind}</p>
@@ -64,8 +62,8 @@ function FeaturedProject({ project, reduceMotion }) {
 
           <div className="featured-stack">
             <span>Tech</span>
-            <ul aria-label="TrackIt technology stack">
-              {['React', 'Node.js', 'Express.js', 'MongoDB'].map((technology) => <li key={technology}>{technology}</li>)}
+            <ul aria-label={`${project.name} technology stack`}>
+              {project.technologies.map((technology) => <li key={technology}>{technology}</li>)}
             </ul>
           </div>
           <ProjectLinks project={project} featured />
@@ -119,7 +117,7 @@ function Projects() {
     <section className="section-block section-projects" id="projects" aria-labelledby="projects-title">
       <div className="page-shell">
         <Reveal>
-          <SectionHeading number="03" eyebrow="Ideas, decisions, and working software" title="Featured project" description="A closer look at the problem, product decisions, and engineering behind TrackIt." id="projects-title" />
+          <SectionHeading number="03" eyebrow="Ideas, decisions, and working software" title="Featured project" description="A closer look at the problem, product decisions, and engineering behind a project in progress." id="projects-title" />
         </Reveal>
         <ResourceState status={status} error={error} retry={retry} label="projects" />
         {status === 'empty' ? <p className="resource-empty">Projects will appear here when they are published.</p> : <>

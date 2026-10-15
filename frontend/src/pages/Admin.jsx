@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
+import { Link, Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { ArrowLeft, ArrowUpRight, Check, LogOut, Plus, Save, Trash2 } from 'lucide-react'
 import { createAdminItem, deleteAdminItem, getAdminCollection, getAdminMessages, getAdminOverview, getCurrentAdmin, login, logout, updateAdminItem, updateMessageStatus } from '../services/authService.js'
 
@@ -133,11 +133,11 @@ function normalizeForm(form, collection) {
   }))
 }
 
-function AdminCollection({ collection }) {
+function AdminCollection({ collection, newItem }) {
   const navigate = useNavigate()
+  const location = useLocation()
   const { recordId } = useParams()
   const { section = collection } = useParams()
-  const newItem = location.pathname.endsWith('/new')
   const config = sections.find((item) => item.id === section)
   const formFields = fields[collection]
   const blankForm = Object.fromEntries(formFields.map(([name, , type]) => [name, type === 'checkbox' ? false : '']))
@@ -250,8 +250,10 @@ function AdminMessages() {
 }
 
 export function AdminPage() {
-  const { section = 'projects', recordId } = useParams()
+  const { section = 'projects' } = useParams()
+  const location = useLocation()
   if (section === 'messages') return <AdminMessages />
   if (!fields[section]) return <Navigate to="/admin" replace />
-  return <AdminCollection key={`${section}-${recordId || ''}-${location.pathname.endsWith('/new')}`} collection={section} />
+  const newItem = location.pathname.endsWith('/new')
+  return <AdminCollection key={`${section}-${location.pathname}`} collection={section} newItem={newItem} />
 }
