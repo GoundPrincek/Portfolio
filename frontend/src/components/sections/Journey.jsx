@@ -2,17 +2,40 @@ import { useRef, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion, useScroll } from 'framer-motion'
 import { ArrowDownRight, ArrowUpRight, BriefcaseBusiness, Bug, Code2, GraduationCap, Presentation } from 'lucide-react'
 import { journey } from '../../data/journey.js'
+import { getAchievements, getExperience } from '../../services/experienceService.js'
+import { useResource } from '../../hooks/useResource.js'
 import Reveal from '../shared/Reveal.jsx'
 import SectionHeading from '../shared/SectionHeading.jsx'
+import ResourceState from '../shared/ResourceState.jsx'
 
 const icons = { education: GraduationCap, building: Code2, projects: Code2, showcase: Presentation, event: Bug, internship: BriefcaseBusiness }
 
+async function loadJourney() {
+  const [experiences, achievements] = await Promise.all([getExperience(), getAchievements()])
+  const titles = new Set(experiences.map((item) => item.title.toLowerCase()))
+  const uniqueAchievements = achievements.filter((item) => !titles.has(item.title.toLowerCase()))
+  return [
+    ...experiences,
+    ...uniqueAchievements.map((item) => ({
+      ...item,
+      id: `achievement-${item.id}`,
+      period: item.date ? new Date(item.date).getFullYear().toString() : item.category,
+      year: item.date ? new Date(item.date).getFullYear().toString() : '',
+      learned: item.description,
+      related: item.category,
+    })),
+  ]
+}
+
 function Journey() {
   const [selectedId, setSelectedId] = useState('stackfix')
+  const fallbackJourney = journey.map((item) => ({ ...item }))
+  const { data, status, error, retry } = useResource(loadJourney, fallbackJourney)
   const reduceMotion = useReducedMotion()
   const railRef = useRef(null)
   const { scrollYProgress } = useScroll({ target: railRef, offset: ['start 76%', 'end 48%'] })
-  const selected = journey.find((item) => item.id === selectedId) ?? journey[0]
+  const selected = data.find((item) => item.id === selectedId) ?? data.find((item) => item.title.toLowerCase().includes('stackfix')) ?? data[0]
+  if (!selected) return null
   const SelectedIcon = icons[selected.category === 'Education' ? 'education' : selected.category === 'Building' ? 'building' : selected.category === 'Projects' ? 'projects' : selected.category === 'Showcase' ? 'showcase' : selected.category === 'Technical event' ? 'event' : 'internship']
 
   return (
@@ -21,16 +44,18 @@ function Journey() {
         <Reveal>
           <SectionHeading number="05" eyebrow="Internship · project showcase · debugging competition" title="Journey & experience" description="Three experiences shaping how I communicate, present my work, and solve problems." id="journey-title" />
         </Reveal>
-        <div className="journey-layout">
+        <ResourceState status={status} error={error} retry={retry} label="journey items" />
+        {status === 'empty' ? <p className="resource-empty">Experience and milestones will appear here when they are published.</p> : <div className="journey-layout">
           <div className="journey-rail" ref={railRef} role="group" aria-label="Choose a journey milestone">
             {!reduceMotion && <motion.span className="journey-progress" aria-hidden="true" style={{ scaleY: scrollYProgress }} />}
-            {journey.map((item, index) => {
-              const Icon = icons[item.category === 'Education' ? 'education' : item.category === 'Building' ? 'building' : item.category === 'Projects' ? 'projects' : item.category === 'Showcase' ? 'showcase' : item.category === 'Technical event' ? 'event' : 'internship']
-              const active = item.id === selectedId
+            {data.map((item, index) => {
+              const category = item.category.toLowerCase()
+              const Icon = icons[category.includes('education') ? 'education' : category.includes('building') ? 'building' : category.includes('project') ? 'projects' : category.includes('showcase') ? 'showcase' : category.includes('technical') || category.includes('competition') ? 'event' : 'internship']
+              const active = item.id === selected.id
               return (
                 <Reveal key={item.id} delay={index * 0.035}>
                   <motion.button
-                    className={`journey-stop${active ? ' is-selected' : ''}${item.id === 'stackfix' ? ' is-featured' : ''}`}
+                    className={`journey-stop${active ? ' is-selected' : ''}${item.title.toLowerCase().includes('stackfix') ? ' is-featured' : ''}`}
                     type="button"
                     onClick={() => setSelectedId(item.id)}
                     aria-pressed={active}
@@ -68,7 +93,7 @@ function Journey() {
               </motion.article>
             </AnimatePresence>
           </div>
-        </div>
+        </div>}
       </div>
     </section>
   )

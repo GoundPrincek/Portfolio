@@ -1,0 +1,27 @@
+import { useEffect, useState } from 'react'
+
+export function useResource(loader, fallback = []) {
+  const [data, setData] = useState(fallback)
+  const [status, setStatus] = useState('loading')
+  const [error, setError] = useState('')
+  const [attempt, setAttempt] = useState(0)
+
+  useEffect(() => {
+    let active = true
+    setStatus('loading')
+    loader().then((items) => {
+      if (!active) return
+      const value = items ?? []
+      setData(value)
+      setError('')
+      setStatus(value.length ? 'success' : 'empty')
+    }).catch((reason) => {
+      if (!active) return
+      setError(reason.message || 'Unable to load this content.')
+      setStatus('error')
+    })
+    return () => { active = false }
+  }, [loader, attempt])
+
+  return { data, status, error, retry: () => setAttempt((value) => value + 1) }
+}

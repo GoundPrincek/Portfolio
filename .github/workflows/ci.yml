@@ -1,0 +1,35 @@
+name: Portfolio CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            backend/package-lock.json
+            frontend/package-lock.json
+      - name: Install backend dependencies
+        run: npm ci --prefix backend
+      - name: Generate Prisma client
+        run: npm --prefix backend run db:generate
+      - name: Check backend syntax
+        run: npm --prefix backend run lint
+      - name: Test API behavior
+        run: npm --prefix backend test
+      - name: Install frontend dependencies
+        run: npm ci --prefix frontend
+      - name: Lint frontend
+        run: npm --prefix frontend run lint
+      - name: Build frontend
+        run: npm --prefix frontend run build

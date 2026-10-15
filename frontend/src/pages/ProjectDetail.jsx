@@ -1,13 +1,42 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, ArrowUpRight, Code2, ExternalLink } from 'lucide-react'
 import { projects } from '../data/projects.js'
+import { getProject } from '../services/projectService.js'
 import Reveal from '../components/shared/Reveal.jsx'
 import SectionHeading from '../components/shared/SectionHeading.jsx'
+import ResourceState from '../components/shared/ResourceState.jsx'
 
 function ProjectDetail() {
   const { projectId } = useParams()
-  const project = projects.find((item) => item.id === projectId)
+  const fallback = projects.find((item) => item.id === projectId)
+  const [project, setProject] = useState(fallback)
+  const [loadState, setLoadState] = useState('loading')
+  const [loadError, setLoadError] = useState('')
+  const [retryCount, setRetryCount] = useState(0)
+
+  useEffect(() => {
+    let active = true
+    setProject(fallback)
+    setLoadState('loading')
+    getProject(projectId).then((value) => {
+      if (!active) return
+      setProject(value)
+      setLoadError('')
+      setLoadState(value ? 'success' : 'empty')
+    }).catch((error) => {
+      if (!active) return
+      if (error.status === 404) {
+        setProject(null)
+        setLoadState('empty')
+      } else {
+        setProject(fallback)
+        setLoadError(error.message)
+        setLoadState('error')
+      }
+    })
+    return () => { active = false }
+  }, [projectId, retryCount])
 
   useEffect(() => {
     if (project) {
@@ -27,6 +56,7 @@ function ProjectDetail() {
   }, [project])
 
   if (!project) {
+    if (loadState === 'loading') return <main className="detail-page page-shell" id="main-content"><p role="status">Loading project…</p></main>
     return (
       <main className="detail-page not-found-page page-shell" id="main-content">
         <p className="section-eyebrow">404 · Project not found</p>
@@ -39,6 +69,7 @@ function ProjectDetail() {
 
   return (
     <main className="detail-page page-shell" id="main-content">
+      <ResourceState status={loadState} error={loadError} retry={() => setRetryCount((count) => count + 1)} label="project details" />
       <Reveal>
         <Link className="back-link" to="/#projects"><ArrowLeft size={14} aria-hidden="true" /> Back to all projects</Link>
         <div className="detail-hero">
@@ -53,12 +84,18 @@ function ProjectDetail() {
         </div>
       </Reveal>
 
+      {(project.imageUrl || project.galleryUrls?.length > 0) && <div className="detail-gallery" aria-label={`${project.name} screenshots`}>
+        {project.imageUrl && <figure><img src={project.imageUrl} alt={`${project.name} project screenshot`} loading="lazy" /><figcaption>Project screenshot</figcaption></figure>}
+        {project.galleryUrls?.map((image, index) => <figure key={image}><img src={image} alt={`${project.name} screenshot ${index + 1}`} loading="lazy" /><figcaption>Screenshot {index + 1}</figcaption></figure>)}
+      </div>}
+
       <div className="detail-content-grid">
         <Reveal className="detail-main-column" delay={0.05}>
           <section className="detail-section">
             <SectionHeading eyebrow="The overview" title="What this project is" />
             <p>{project.overview}</p>
           </section>
+          {project.contribution && <section className="detail-section"><SectionHeading eyebrow="My contribution" title="What I worked on" /><p>{project.contribution}</p></section>}
           <section className="detail-section">
             <SectionHeading eyebrow="The problem space" title="Why I’m exploring it" />
             <p>{project.problem}</p>

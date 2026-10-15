@@ -15,8 +15,9 @@ export const contactSchema = z.object({
 
 export const projectSchema = z.object({
   title: text(120), slug: z.string().trim().min(2).max(140).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  subtitle: optionalText(180), localName: optionalText(80), tagline: optionalText(180),
   shortDescription: text(400), description: text(5000), problem: text(5000), solution: text(5000),
-  architecture: text(5000), designQuestion: optionalText(2000), learned: optionalText(2000),
+  architecture: text(5000), designQuestion: optionalText(2000), learned: optionalText(2000), contribution: optionalText(2000),
   kind: text(120), status: text(80), technologies: stringList, features: stringList,
   githubUrl: z.string().url().max(2048), liveUrl: url.optional(), imageUrl: url.optional(),
   galleryUrls: z.array(z.string().url().max(2048)).max(12).default([]), featured: z.boolean().default(false), sortOrder: order,

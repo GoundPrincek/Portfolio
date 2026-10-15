@@ -8,8 +8,10 @@ export const profile = asyncHandler(async (req, res) => {
 
 export const repositories = asyncHandler(async (req, res) => {
   const { username, token } = req.app.locals.github
-  const projects = await req.app.locals.prisma.project.findMany({ where: { featured: true }, select: { title: true } })
-  const names = projects.map(({ title }) => title.replace(/\s+/g, ''))
+  const projects = await req.app.locals.prisma.project.findMany({ select: { githubUrl: true } })
+  const names = projects.map(({ githubUrl }) => {
+    try { return new URL(githubUrl).pathname.split('/').filter(Boolean).at(-1) || '' } catch { return '' }
+  }).filter(Boolean)
   const data = await getGitHubRepos(username, token, names)
   return success(res, 'Selected GitHub repositories fetched successfully', data)
 })

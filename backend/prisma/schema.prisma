@@ -31,6 +31,9 @@ model User {
 model Project {
   id               String   @id @default(cuid())
   title            String
+  subtitle         String?
+  localName        String?
+  tagline          String?
   slug             String   @unique
   shortDescription String
   description      String
@@ -39,6 +42,7 @@ model Project {
   architecture     String
   designQuestion   String
   learned          String
+  contribution     String?
   kind             String
   status           String
   technologies     String[]

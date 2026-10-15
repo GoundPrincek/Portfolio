@@ -6,7 +6,7 @@ import { achievementSchema, contactSchema, educationSchema, experienceSchema, lo
 import { list, projectBySlug } from '../controllers/content.controller.js'
 import { login, logout, me } from '../controllers/auth.controller.js'
 import { listMessages, submit, updateMessage } from '../controllers/contact.controller.js'
-import { overview, createCollectionItem, deleteCollectionItem, updateCollectionItem } from '../controllers/admin.controller.js'
+import { overview, createCollectionItem, deleteCollectionItem, listCollection, updateCollectionItem } from '../controllers/admin.controller.js'
 import { profile, repositories } from '../controllers/github.controller.js'
 import { asyncHandler, success } from '../utils/errors.js'
 
@@ -55,6 +55,10 @@ export function createApiRouter({ adminAuth }) {
   adminRouter.get('/overview', overview)
   adminRouter.get('/messages', listMessages)
   adminRouter.patch('/messages/:id', validate(messageStatusSchema), updateMessage)
+  adminRouter.get('/:collection', asyncHandler(async (req, res, next) => {
+    if (!collections.some(([name]) => name === req.params.collection)) return next()
+    return listCollection(req.params.collection)(req, res, next)
+  }))
   router.use('/admin', adminRouter)
 
   return router

@@ -6,7 +6,7 @@ export const login = asyncHandler(async (req, res) => {
   res.cookie('portfolio_admin', token, {
     httpOnly: true,
     secure: req.app.locals.isProduction,
-    sameSite: 'lax',
+    sameSite: res.app.locals.isProduction ? 'none' : 'lax',
     maxAge: 30 * 60 * 1000,
     path: '/',
   })
@@ -14,7 +14,7 @@ export const login = asyncHandler(async (req, res) => {
 })
 
 export const logout = (_req, res) => {
-  res.clearCookie('portfolio_admin', { httpOnly: true, secure: res.app.locals.isProduction, sameSite: 'lax', path: '/' })
+  res.clearCookie('portfolio_admin', { httpOnly: true, secure: res.app.locals.isProduction, sameSite: res.app.locals.isProduction ? 'none' : 'lax', path: '/' })
   return success(res, 'Signed out successfully', null)
 }
 

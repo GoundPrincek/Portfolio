@@ -1,11 +1,16 @@
 import { ArrowUpRight, GraduationCap } from 'lucide-react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { aboutContent } from '../../data/about.js'
+import { getEducation } from '../../services/experienceService.js'
+import { useResource } from '../../hooks/useResource.js'
 import Reveal from '../shared/Reveal.jsx'
 import SectionHeading from '../shared/SectionHeading.jsx'
+import ResourceState from '../shared/ResourceState.jsx'
 
 function About() {
   const reduceMotion = useReducedMotion()
+  const { data: education, status, error, retry } = useResource(getEducation, [{ id: 'local-education', description: aboutContent.education }])
+  const educationText = education.map((item) => item.description || `${item.degree} · ${item.field} · ${item.institution}`).join(' · ')
 
   return (
     <section className="section-block section-about" id="about" aria-labelledby="about-title">
@@ -30,9 +35,10 @@ function About() {
           </ol>
           <div className="education-note">
             <GraduationCap size={18} aria-hidden="true" />
-            <span>{aboutContent.education}</span>
+            <span>{status === 'empty' ? 'Education details will appear here when published.' : educationText}</span>
             <a href="#journey" aria-label="Explore my education and journey"><ArrowUpRight size={15} aria-hidden="true" /></a>
           </div>
+          <ResourceState status={status} error={error} retry={retry} label="education details" />
         </Reveal>
       </div>
     </section>

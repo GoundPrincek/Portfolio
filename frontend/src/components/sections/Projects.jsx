@@ -2,8 +2,11 @@ import { ArrowRight, ArrowUpRight, Code2, ExternalLink } from 'lucide-react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { projects } from '../../data/projects.js'
+import { getProjects } from '../../services/projectService.js'
+import { useResource } from '../../hooks/useResource.js'
 import Reveal from '../shared/Reveal.jsx'
 import SectionHeading from '../shared/SectionHeading.jsx'
+import ResourceState from '../shared/ResourceState.jsx'
 
 function ProjectLinks({ project, featured = false }) {
   return (
@@ -27,8 +30,10 @@ function FeaturedProject({ project, reduceMotion }) {
         whileHover={reduceMotion ? undefined : { y: -3 }}
         transition={{ duration: 0.2 }}
       >
-        <div className="featured-map" role="img" aria-label="TrackIt system map connecting planning, tracking, and follow-through">
-          <div className="featured-map-topline"><span>TRACKIT / SYSTEM MAP</span><span>01 — FEATURED</span></div>
+        {project.imageUrl ? (
+          <img className="featured-project-image" src={project.imageUrl} alt={`${project.name} project screenshot`} loading="lazy" />
+        ) : <div className="featured-map" role="img" aria-label={`${project.name} system map connecting its main workflows`}>
+          <div className="featured-map-topline"><span>{project.name.toUpperCase()} / SYSTEM MAP</span><span>01 — FEATURED</span></div>
           <div className="featured-map-core">
             <span className="featured-map-orbit featured-map-orbit-one" aria-hidden="true" />
             <span className="featured-map-orbit featured-map-orbit-two" aria-hidden="true" />
@@ -38,7 +43,7 @@ function FeaturedProject({ project, reduceMotion }) {
             <span className="map-node map-node-do">Follow through<small>todos · reminders</small></span>
           </div>
           <div className="featured-map-caption"><span>One workspace</span><span className="map-caption-line" aria-hidden="true" /><span>Connected routines</span></div>
-        </div>
+        </div>}
 
         <div className="featured-copy">
           <div className="project-card-header">
@@ -46,15 +51,15 @@ function FeaturedProject({ project, reduceMotion }) {
             <span className="project-status status-active"><i />{project.status}</span>
           </div>
           <p className="project-kind">{project.kind}</p>
-          <h3><Link to={`/projects/${project.id}`}>TrackIt <ArrowUpRight size={17} aria-hidden="true" /></Link></h3>
-          <p className="featured-subtitle">Smart Personal Finance &amp; Productivity Tracker</p>
-          <p className="featured-summary">One workspace for managing money and the everyday tasks that move personal goals forward.</p>
+          <h3><Link to={`/projects/${project.id}`}>{project.name} <ArrowUpRight size={17} aria-hidden="true" /></Link></h3>
+          <p className="featured-subtitle">{project.title}</p>
+          <p className="featured-summary">{project.summary}</p>
 
           <div className="featured-stories">
             <div><span>Problem</span><p>{project.problem}</p></div>
             <div><span>Solution</span><p>{project.overview}</p></div>
-            <div><span>Architecture</span><p>React + Vite frontend · Node.js + Express.js API · MongoDB + Mongoose data layer.</p></div>
-            <div><span>My contribution</span><p>Building the salary, budget, expense, goals, tasks, and analytics flows across the React interface and modular backend.</p></div>
+            <div><span>Architecture</span><p>{project.architecture}</p></div>
+            {project.contribution && <div><span>My contribution</span><p>{project.contribution}</p></div>}
           </div>
 
           <div className="featured-stack">
@@ -106,7 +111,9 @@ function SupportingProject({ project, reduceMotion }) {
 
 function Projects() {
   const reduceMotion = useReducedMotion()
-  const [featured, ...supporting] = projects
+  const { data, status, error, retry } = useResource(getProjects, projects)
+  const sortedProjects = [...data].sort((a, b) => Number(b.featured) - Number(a.featured) || a.index.localeCompare(b.index))
+  const [featured, ...supporting] = sortedProjects
 
   return (
     <section className="section-block section-projects" id="projects" aria-labelledby="projects-title">
@@ -114,11 +121,14 @@ function Projects() {
         <Reveal>
           <SectionHeading number="03" eyebrow="Ideas, decisions, and working software" title="Featured project" description="A closer look at the problem, product decisions, and engineering behind TrackIt." id="projects-title" />
         </Reveal>
+        <ResourceState status={status} error={error} retry={retry} label="projects" />
+        {status === 'empty' ? <p className="resource-empty">Projects will appear here when they are published.</p> : <>
         {featured && <FeaturedProject project={featured} reduceMotion={reduceMotion} />}
-        <Reveal><h3 className="projects-support-title">Other projects</h3></Reveal>
-        <div className="projects-support-grid" aria-label="More projects">
-          {supporting.map((project) => <SupportingProject key={project.id} project={project} reduceMotion={reduceMotion} />)}
-        </div>
+        {supporting.length > 0 && <><Reveal><h3 className="projects-support-title">Other projects</h3></Reveal>
+          <div className="projects-support-grid" aria-label="More projects">
+            {supporting.map((project) => <SupportingProject key={project.id} project={project} reduceMotion={reduceMotion} />)}
+          </div></>}
+        </>}
       </div>
     </section>
   )

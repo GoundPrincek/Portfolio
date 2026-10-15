@@ -9,6 +9,7 @@ import { requireAdmin } from './middleware/auth.js'
 import { errorHandler, notFound } from './middleware/errorHandler.js'
 import { logger } from './utils/logger.js'
 import { openApiSpec } from './openapi.js'
+import { AppError } from './utils/errors.js'
 
 export function createApp({ prisma, jwtSecret, clientUrl = '', githubUsername = 'GoundPrincek', githubToken = '', isProduction = false }) {
   if (!prisma) throw new Error('A Prisma-compatible client is required.')
@@ -28,7 +29,7 @@ export function createApp({ prisma, jwtSecret, clientUrl = '', githubUsername = 
     credentials: true,
     origin(origin, callback) {
       if (!origin || allowedOrigins.includes(origin)) return callback(null, true)
-      return callback(new Error('Origin is not allowed by CORS.'))
+      return callback(new AppError(403, 'CORS_ORIGIN_DENIED', 'This origin is not allowed.'))
     },
   }))
   app.use(express.json({ limit: '20kb', strict: true }))

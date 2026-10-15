@@ -55,6 +55,12 @@
 :root[data-theme='light'] #root :where(.education-note, .about-process li, .focus-tags li, .project-feature-list span, .featured-stack li, .detail-tech-list li) { border-color: var(--line); background: #f8faf6; }
 :root[data-theme='light'] #root :where(.site-footer) { border-color: var(--line); background: #edf1e9; }
 :root[data-theme='light'] #root :where(.contact-form input, .contact-form textarea) { border-color: var(--line-strong); background: #fff; color: var(--text-strong); }
+:root[data-theme='light'] #root :where(.admin-panel, .admin-overview-card, .admin-list-item, .admin-content-form, .admin-message) { border-color: var(--line); background: #fff; box-shadow: 0 12px 36px rgb(32 47 26 / 5%); }
+:root[data-theme='light'] #root :where(.admin-form input, .admin-form textarea, .admin-message select) { border-color: var(--line-strong); background: #fff; color: var(--text-strong); }
+:root[data-theme='light'] #root :where(.admin-form label, .admin-nav a, .admin-logout, .admin-list-actions a, .admin-list-actions button) { color: var(--text-muted); }
+:root[data-theme='light'] #root :where(.admin-header, .admin-nav, .admin-message header) { border-color: var(--line); }
+:root[data-theme='light'] #root :where(.admin-overview-card:hover, .admin-list-item) { border-color: var(--line-strong); }
+:root[data-theme='light'] #root :where(.resource-state, .resource-empty, .admin-note) { border-color: var(--line); }
 :root[data-theme='light'] #root :where(.featured-map) { border-color: #dbe4d5; background: radial-gradient(ellipse at 48% 48%, rgb(117 151 83 / 13%), transparent 47%), linear-gradient(155deg, #edf3e9, #e4ecdf 72%); }
 :root[data-theme='light'] #root :where(.featured-map-center, .map-node) { border-color: #c7d7bc; background: rgb(255 255 255 / 94%); box-shadow: 0 9px 30px rgb(44 61 36 / 10%); }
 :root[data-theme='light'] #root :where(.featured-map-center) { color: #42662b; }
