@@ -21,7 +21,7 @@ function Skills() {
           <SectionHeading number="04" eyebrow="Tools I use to build" title="Engineering skills" description="A practical snapshot of the technologies I’m using across my projects." id="skills-title" />
         </Reveal>
         <ResourceState status={status} error={error} retry={retry} label="skills" />
-        {status === 'empty' ? <p className="resource-empty">Skills will appear here when they are published.</p> : <div className="skill-rows">
+        {status !== 'empty' && <div className="skill-rows">
           {groups.map((row, index) => (
             <Reveal key={row.category} delay={index * 0.04}>
               <div className="skill-row">

@@ -1,3 +1,5 @@
+import { AppError } from '../utils/errors.js'
+
 const cache = new Map()
 const ttl = 5 * 60 * 1000
 
@@ -18,8 +20,8 @@ async function githubFetch(path, token) {
     },
     signal: AbortSignal.timeout(5000),
   })
-  if (!response.ok) throw new Error(`GitHub API returned ${response.status}`)
-  return response.json()
+  if (!response.ok) throw new AppError(502, 'GITHUB_UNAVAILABLE', 'GitHub data is temporarily unavailable.')
+  try { return await response.json() } catch { throw new AppError(502, 'GITHUB_UNAVAILABLE', 'GitHub returned an invalid response.') }
 }
 
 export function getGitHubProfile(username, token) {

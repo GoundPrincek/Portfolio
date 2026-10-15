@@ -1,41 +1,73 @@
-const protectedCookie = [{ AdminCookie: [] }]
-const success = (schema) => ({ type: 'object', properties: { success: { type: 'boolean', example: true }, message: { type: 'string' }, data: schema } })
-const arrayOf = (schema) => ({ type: 'array', items: schema })
-const string = { type: 'string' }
-const project = { type: 'object', properties: { id: string, slug: string, name: string, summary: string, status: string, technologies: arrayOf(string), features: arrayOf(string), repository: { type: 'string', format: 'uri' }, live: { type: 'string', format: 'uri', nullable: true } } }
-const item = { type: 'object', additionalProperties: true }
+const text = { type: 'string' }
+const url = { type: 'string', format: 'uri' }
+const list = { type: 'array', items: text }
+const adminSecurity = [{ AdminCookie: [] }]
+const response = (schema, description) => ({ description, content: { 'application/json': { schema } } })
+const envelope = (schema) => ({ type: 'object', required: ['success', 'message', 'data'], properties: { success: { type: 'boolean', example: true }, message: text, data: schema } })
+const array = (schema) => ({ type: 'array', items: schema })
+const record = (properties, required = []) => ({ type: 'object', required, properties })
+
+const projectView = record({ id: text, slug: text, index: text, name: text, title: text, summary: text, overview: text, problem: text, solution: text, architecture: text, status: text, kind: text, technologies: list, features: list, repository: url, live: { ...url, nullable: true }, imageUrl: { ...url, nullable: true }, galleryUrls: list, featured: { type: 'boolean' } })
+const projectInput = record({
+  title: text, slug: { type: 'string', pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$' }, subtitle: text, localName: text, tagline: text,
+  shortDescription: { type: 'string', maxLength: 400 }, description: text, problem: text, solution: text, architecture: text,
+  designQuestion: text, learned: text, contribution: text, kind: text, status: text, technologies: list, features: list,
+  githubUrl: url, liveUrl: { ...url, nullable: true }, imageUrl: { ...url, nullable: true }, galleryUrls: array(url), featured: { type: 'boolean' }, sortOrder: { type: 'integer', minimum: 0 },
+}, ['title', 'slug', 'shortDescription', 'description', 'problem', 'solution', 'architecture', 'kind', 'status', 'technologies', 'features', 'githubUrl'])
+const schemas = {
+  Project: projectView,
+  ProjectInput: projectInput,
+  SkillInput: record({ name: text, category: text, level: text, sortOrder: { type: 'integer', minimum: 0 } }, ['name', 'category']),
+  ExperienceInput: record({ title: text, organization: text, description: text, learned: text, related: text, category: text, period: text, year: text, startDate: { type: 'string', format: 'date-time', nullable: true }, endDate: { type: 'string', format: 'date-time', nullable: true }, location: text, sortOrder: { type: 'integer', minimum: 0 } }, ['title', 'organization', 'description', 'category', 'period']),
+  EducationInput: record({ institution: text, degree: text, field: text, description: text, startDate: { type: 'string', format: 'date-time', nullable: true }, endDate: { type: 'string', format: 'date-time', nullable: true }, sortOrder: { type: 'integer', minimum: 0 } }, ['institution', 'degree', 'field', 'description']),
+  AchievementInput: record({ title: text, category: text, description: text, date: { type: 'string', format: 'date-time', nullable: true }, url: { ...url, nullable: true }, sortOrder: { type: 'integer', minimum: 0 } }, ['title', 'category', 'description']),
+  ContactRequest: record({ name: text, email: { type: 'string', format: 'email' }, subject: text, message: { type: 'string', minLength: 10, maxLength: 5000 } }, ['name', 'email', 'message']),
+  LoginRequest: record({ email: { type: 'string', format: 'email' }, password: { type: 'string', format: 'password' } }, ['email', 'password']),
+  MessageStatus: record({ status: { type: 'string', enum: ['NEW', 'READ', 'REPLIED', 'ARCHIVED'] } }, ['status']),
+  Error: record({ success: { type: 'boolean', example: false }, message: text, error: text }, ['success', 'message', 'error']),
+}
+
+const unauthorized = response({ $ref: '#/components/schemas/Error' }, 'Admin sign-in required.')
+const validationError = response({ $ref: '#/components/schemas/Error' }, 'Request fields failed validation.')
+const paths = {
+  '/health': { get: { tags: ['Health'], summary: 'Check API and PostgreSQL connectivity', responses: { 200: response(envelope(record({ status: text, database: text })), 'Service and database are healthy.'), 503: response(envelope(record({ status: text, database: text })), 'Database is unavailable.') } } },
+  '/auth/login': { post: { tags: ['Authentication'], summary: 'Sign in as the portfolio admin', requestBody: { required: true, content: { 'application/json': { schema: { $ref: '#/components/schemas/LoginRequest' } } } }, responses: { 200: response(envelope(record({ user: record({ id: text, name: text, email: { type: 'string', format: 'email' }, role: text }) })), 'Signed in; sets an HttpOnly cookie.'), 400: validationError, 401: response({ $ref: '#/components/schemas/Error' }, 'Email or password is incorrect.') } } },
+  '/auth/logout': { post: { tags: ['Authentication'], summary: 'Clear the admin cookie', responses: { 200: response(envelope({ type: 'null' }), 'Signed out.') } } },
+  '/auth/me': { get: { tags: ['Authentication'], summary: 'Read the current admin session', security: adminSecurity, responses: { 200: response(envelope(record({ user: record({ id: text, email: { type: 'string', format: 'email' }, role: text }) })), 'Current owner session.'), 401: unauthorized } } },
+  '/contact': { post: { tags: ['Contact'], summary: 'Validate and save a contact message', requestBody: { required: true, content: { 'application/json': { schema: { $ref: '#/components/schemas/ContactRequest' } } } }, responses: { 201: response(envelope({ type: 'null' }), 'Message saved for owner review.'), 400: validationError, 429: response({ $ref: '#/components/schemas/Error' }, 'Contact rate limit reached.') } } },
+  '/github/profile': { get: { tags: ['GitHub'], summary: 'Read the cached public GitHub profile', responses: { 200: response(envelope(record({ username: text, name: text, avatarUrl: url, url, bio: text, publicRepos: { type: 'integer' } })), 'Public profile details.'), 502: response({ $ref: '#/components/schemas/Error' }, 'GitHub is unavailable.') } } },
+  '/github/repos': { get: { tags: ['GitHub'], summary: 'Read cached selected portfolio repositories', responses: { 200: response(envelope(array(record({ name: text, fullName: text, description: text, url, language: text, stars: { type: 'integer' }, updatedAt: { type: 'string', format: 'date-time' } }))), 'Only repositories linked from projects are returned.') } } },
+  '/admin/overview': { get: { tags: ['Admin'], summary: 'Get dashboard content and message counts', security: adminSecurity, responses: { 200: response(envelope(record({ projects: { type: 'integer' }, skills: { type: 'integer' }, experience: { type: 'integer' }, education: { type: 'integer' }, achievements: { type: 'integer' }, messages: { type: 'integer' }, newMessages: { type: 'integer' } })), 'Dashboard overview.'), 401: unauthorized } } },
+  '/admin/messages': { get: { tags: ['Admin'], summary: 'List contact messages, newest first', security: adminSecurity, responses: { 200: response(envelope(array(record({ id: text, name: text, email: { type: 'string', format: 'email' }, subject: text, message: text, status: text, createdAt: { type: 'string', format: 'date-time' }, readAt: { type: 'string', format: 'date-time', nullable: true } }))), 'Stored messages.'), 401: unauthorized } } },
+  '/admin/messages/{id}': { patch: { tags: ['Admin'], summary: 'Change a contact message status', security: adminSecurity, parameters: [{ name: 'id', in: 'path', required: true, schema: text }], requestBody: { required: true, content: { 'application/json': { schema: { $ref: '#/components/schemas/MessageStatus' } } } }, responses: { 200: response(envelope(record({ id: text, status: text, readAt: { type: 'string', format: 'date-time', nullable: true } })), 'Message status updated.'), 400: validationError, 401: unauthorized } } },
+}
+
+const itemInputs = { projects: 'ProjectInput', skills: 'SkillInput', experience: 'ExperienceInput', education: 'EducationInput', achievements: 'AchievementInput' }
+const itemSchemas = { projects: 'Project', skills: 'SkillInput', experience: 'ExperienceInput', education: 'EducationInput', achievements: 'AchievementInput' }
+
+for (const [collection, inputSchema] of Object.entries(itemInputs)) {
+  const tag = collection[0].toUpperCase() + collection.slice(1)
+  paths[`/${collection}`] = {
+    get: { tags: [tag], summary: `List public ${collection}`, responses: { 200: response(envelope(array({ $ref: `#/components/schemas/${itemSchemas[collection]}` })), `${collection} in display order.`) } },
+    post: { tags: [tag], summary: `Create a ${collection.slice(0, -1)} (admin)`, security: adminSecurity, requestBody: { required: true, content: { 'application/json': { schema: { $ref: `#/components/schemas/${inputSchema}` } } }, responses: { 201: response(envelope({ $ref: `#/components/schemas/${itemSchemas[collection]}` }), 'Record created.'), 400: validationError, 401: unauthorized } },
+  }
+  paths[`/${collection}/{id}`] = {
+    ...(collection === 'projects' ? { get: { tags: [tag], summary: 'Get a public project case study by slug', parameters: [{ name: 'id', in: 'path', required: true, description: 'Project slug.', schema: text }], responses: { 200: response(envelope({ $ref: '#/components/schemas/Project' }), 'Project detail.'), 404: response({ $ref: '#/components/schemas/Error' }, 'Project not found.') } } } : {}),
+    put: { tags: [tag], summary: `Update ${collection} item (admin)`, security: adminSecurity, parameters: [{ name: 'id', in: 'path', required: true, description: 'Database record ID.', schema: text }], requestBody: { required: true, content: { 'application/json': { schema: { $ref: `#/components/schemas/${inputSchema}` } } }, responses: { 200: response(envelope({ $ref: `#/components/schemas/${itemSchemas[collection]}` }), 'Record updated.'), 400: validationError, 401: unauthorized, 404: response({ $ref: '#/components/schemas/Error' }, 'Record not found.') } },
+    delete: { tags: [tag], summary: `Delete ${collection} item (admin)`, security: adminSecurity, parameters: [{ name: 'id', in: 'path', required: true, description: 'Database record ID.', schema: text }], responses: { 200: response(envelope({ type: 'null' }), 'Record deleted.'), 401: unauthorized, 404: response({ $ref: '#/components/schemas/Error' }, 'Record not found.') } },
+  }
+  paths[`/admin/${collection}`] = { get: { tags: ['Admin', tag], summary: `List ${collection} for the CMS`, security: adminSecurity, responses: { 200: response(envelope(array({ $ref: `#/components/schemas/${inputSchema}` })), 'Management records, including private fields.') , 401: unauthorized } } }
+}
 
 export const openApiSpec = {
   openapi: '3.0.3',
-  info: { title: 'Prince Gound Portfolio API', version: '1.0.0', description: 'Public portfolio content, contact intake, selected public GitHub data, and protected owner CMS endpoints.' },
+  info: { title: 'Prince Gound Portfolio API', version: '1.0.0', description: 'Portfolio content, contact intake, selected GitHub data, and protected owner CMS endpoints.' },
   servers: [{ url: '/api' }],
   tags: ['Health', 'Authentication', 'Projects', 'Skills', 'Experience', 'Education', 'Achievements', 'Contact', 'GitHub', 'Admin'].map((name) => ({ name })),
   components: {
     securitySchemes: { AdminCookie: { type: 'apiKey', in: 'cookie', name: 'portfolio_admin', description: 'HttpOnly, same-site admin cookie set by POST /auth/login.' } },
-    schemas: {
-      Success: success(item),
-      Error: { type: 'object', properties: { success: { type: 'boolean', example: false }, message: string, error: string } },
-      Project: project,
-      ContactRequest: { type: 'object', required: ['name', 'email', 'message'], properties: { name: string, email: { type: 'string', format: 'email' }, subject: string, message: { type: 'string', minLength: 10, maxLength: 5000 } } },
-      LoginRequest: { type: 'object', required: ['email', 'password'], properties: { email: { type: 'string', format: 'email' }, password: { type: 'string', format: 'password' } } },
-    },
-    responses: { Unauthorized: { description: 'Admin sign-in required.', content: { 'application/json': { schema: { $ref: '#/components/schemas/Error' } } } }, ValidationError: { description: 'Request fields failed validation.', content: { 'application/json': { schema: { $ref: '#/components/schemas/Error' } } } } },
+    schemas: { ...schemas },
+    responses: { Unauthorized: unauthorized, ValidationError: validationError },
   },
-  paths: {
-    '/health': { get: { tags: ['Health'], summary: 'Check API and PostgreSQL connectivity', responses: { 200: { description: 'Healthy', content: { 'application/json': { schema: success(item) } } }, 503: { description: 'Database is unavailable' } } } },
-    '/auth/login': { post: { tags: ['Authentication'], summary: 'Sign in as the portfolio admin', requestBody: { required: true, content: { 'application/json': { schema: { $ref: '#/components/schemas/LoginRequest' } } } }, responses: { 200: { description: 'Sets an HttpOnly admin cookie' }, 401: { description: 'Invalid credentials' }, 400: { $ref: '#/components/responses/ValidationError' } } } },
-    '/auth/logout': { post: { tags: ['Authentication'], summary: 'Clear the admin cookie', responses: { 200: { description: 'Signed out' } } } },
-    '/auth/me': { get: { tags: ['Authentication'], summary: 'Read current admin session', security: protectedCookie, responses: { 200: { description: 'Current admin' }, 401: { $ref: '#/components/responses/Unauthorized' } } } },
-    '/projects': { get: { tags: ['Projects'], summary: 'List public projects', responses: { 200: { description: 'Projects', content: { 'application/json': { schema: success(arrayOf(project)) } } } } }, post: { tags: ['Projects'], summary: 'Create a project', security: protectedCookie, requestBody: { required: true, content: { 'application/json': { schema: project } } }, responses: { 201: { description: 'Created' }, 401: { $ref: '#/components/responses/Unauthorized' }, 400: { $ref: '#/components/responses/ValidationError' } } } },
-    '/projects/{id}': { put: { tags: ['Projects'], summary: 'Update a project', security: protectedCookie, parameters: [{ name: 'id', in: 'path', required: true, schema: string }], requestBody: { required: true, content: { 'application/json': { schema: project } } }, responses: { 200: { description: 'Updated' }, 401: { $ref: '#/components/responses/Unauthorized' } } }, delete: { tags: ['Projects'], summary: 'Delete a project', security: protectedCookie, parameters: [{ name: 'id', in: 'path', required: true, schema: string }], responses: { 200: { description: 'Deleted' }, 401: { $ref: '#/components/responses/Unauthorized' } } } },
-    '/projects/{slug}': { get: { tags: ['Projects'], summary: 'Get a project case study by slug', parameters: [{ name: 'slug', in: 'path', required: true, schema: string }], responses: { 200: { description: 'Project', content: { 'application/json': { schema: success(project) } } }, 404: { description: 'Project not found' } } } },
-    ...Object.fromEntries(['skills', 'experience', 'education', 'achievements'].map((path) => [`/${path}`, { get: { tags: [path[0].toUpperCase() + path.slice(1)], summary: `List ${path}`, responses: { 200: { description: 'Items', content: { 'application/json': { schema: success(arrayOf(item)) } } } } }, post: { tags: [path[0].toUpperCase() + path.slice(1)], summary: `Create ${path.slice(0, -1)}`, security: protectedCookie, requestBody: { required: true, content: { 'application/json': { schema: item } } }, responses: { 201: { description: 'Created' }, 401: { $ref: '#/components/responses/Unauthorized' } } } }])),
-    '/{collection}/{id}': { put: { tags: ['Admin'], summary: 'Update a skill, experience, education item, or achievement', security: protectedCookie, parameters: [{ name: 'collection', in: 'path', required: true, schema: { type: 'string', enum: ['projects', 'skills', 'experience', 'education', 'achievements'] } }, { name: 'id', in: 'path', required: true, schema: string }], requestBody: { required: true, content: { 'application/json': { schema: item } } }, responses: { 200: { description: 'Updated' }, 401: { $ref: '#/components/responses/Unauthorized' } } }, delete: { tags: ['Admin'], summary: 'Delete a portfolio item', security: protectedCookie, parameters: [{ name: 'collection', in: 'path', required: true, schema: string }, { name: 'id', in: 'path', required: true, schema: string }], responses: { 200: { description: 'Deleted' }, 401: { $ref: '#/components/responses/Unauthorized' } } } },
-    '/contact': { post: { tags: ['Contact'], summary: 'Validate and save a contact message', requestBody: { required: true, content: { 'application/json': { schema: { $ref: '#/components/schemas/ContactRequest' } } } }, responses: { 201: { description: 'Message stored for admin review' }, 400: { $ref: '#/components/responses/ValidationError' }, 429: { description: 'Contact rate limit reached' } } } },
-    '/github/profile': { get: { tags: ['GitHub'], summary: 'Read the public GitHub profile (cached)', responses: { 200: { description: 'GitHub profile' }, 502: { description: 'GitHub is unavailable' } } } },
-    '/github/repos': { get: { tags: ['GitHub'], summary: 'Read selected portfolio repositories (cached)', responses: { 200: { description: 'Selected repositories' } } } },
-    '/admin/overview': { get: { tags: ['Admin'], summary: 'Get dashboard content and message counts', security: protectedCookie, responses: { 200: { description: 'Dashboard overview' }, 401: { $ref: '#/components/responses/Unauthorized' } } } },
-    '/admin/messages': { get: { tags: ['Admin'], summary: 'List contact messages', security: protectedCookie, responses: { 200: { description: 'Messages' }, 401: { $ref: '#/components/responses/Unauthorized' } } } },
-    '/admin/messages/{id}': { patch: { tags: ['Admin'], summary: 'Update contact message status', security: protectedCookie, parameters: [{ name: 'id', in: 'path', required: true, schema: string }], requestBody: { required: true, content: { 'application/json': { schema: { type: 'object', required: ['status'], properties: { status: { type: 'string', enum: ['NEW', 'READ', 'REPLIED', 'ARCHIVED'] } } } } } }, responses: { 200: { description: 'Status updated' }, 401: { $ref: '#/components/responses/Unauthorized' } } } },
-  },
+  paths,
 }

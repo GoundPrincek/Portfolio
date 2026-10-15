@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { ArrowLeft, ArrowUpRight, Check, LogOut, Plus, Save, Trash2 } from 'lucide-react'
 import { createAdminItem, deleteAdminItem, getAdminCollection, getAdminMessages, getAdminOverview, getCurrentAdmin, login, logout, updateAdminItem, updateMessageStatus } from '../services/authService.js'
@@ -135,12 +135,11 @@ function normalizeForm(form, collection) {
 
 function AdminCollection({ collection, newItem }) {
   const navigate = useNavigate()
-  const location = useLocation()
   const { recordId } = useParams()
   const { section = collection } = useParams()
   const config = sections.find((item) => item.id === section)
   const formFields = fields[collection]
-  const blankForm = Object.fromEntries(formFields.map(([name, , type]) => [name, type === 'checkbox' ? false : '']))
+  const blankForm = useMemo(() => Object.fromEntries(formFields.map(([name, , type]) => [name, type === 'checkbox' ? false : ''])), [formFields])
   const [items, setItems] = useState([])
   const [form, setForm] = useState(blankForm)
   const [error, setError] = useState('')
@@ -161,7 +160,7 @@ function AdminCollection({ collection, newItem }) {
       } else setForm(blankForm)
     }).catch((reason) => { if (active) setError(reason.message || 'Content could not be loaded.') })
     return () => { active = false }
-  }, [collection, recordId, attempt])
+  }, [collection, recordId, attempt, formFields, blankForm])
 
   async function handleSave(event) {
     event.preventDefault()

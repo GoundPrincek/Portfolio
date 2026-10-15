@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
-const url = z.string().url().max(2048).or(z.literal('')).transform((value) => value || null)
+const httpUrl = z.string().url().max(2048).refine((value) => /^https?:\/\//i.test(value), 'Use an http or https URL.')
+const url = httpUrl.or(z.literal('')).transform((value) => value || null)
 const text = (max = 5000) => z.string().trim().min(1).max(max)
 const optionalText = (max = 5000) => z.string().trim().max(max).optional().default('')
 const stringList = z.array(z.string().trim().min(1).max(80)).max(40)
@@ -19,8 +20,8 @@ export const projectSchema = z.object({
   shortDescription: text(400), description: text(5000), problem: text(5000), solution: text(5000),
   architecture: text(5000), designQuestion: optionalText(2000), learned: optionalText(2000), contribution: optionalText(2000),
   kind: text(120), status: text(80), technologies: stringList, features: stringList,
-  githubUrl: z.string().url().max(2048), liveUrl: url.optional(), imageUrl: url.optional(),
-  galleryUrls: z.array(z.string().url().max(2048)).max(12).default([]), featured: z.boolean().default(false), sortOrder: order,
+  githubUrl: httpUrl, liveUrl: url.optional(), imageUrl: url.optional(),
+  galleryUrls: z.array(httpUrl).max(12).default([]), featured: z.boolean().default(false), sortOrder: order,
 })
 export const skillSchema = z.object({ name: text(80), category: text(80), level: text(80).default('Practicing'), sortOrder: order })
 export const experienceSchema = z.object({

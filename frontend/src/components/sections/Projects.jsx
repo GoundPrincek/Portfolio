@@ -120,7 +120,7 @@ function Projects() {
           <SectionHeading number="03" eyebrow="Ideas, decisions, and working software" title="Featured project" description="A closer look at the problem, product decisions, and engineering behind a project in progress." id="projects-title" />
         </Reveal>
         <ResourceState status={status} error={error} retry={retry} label="projects" />
-        {status === 'empty' ? <p className="resource-empty">Projects will appear here when they are published.</p> : <>
+        {status !== 'empty' && <>
         {featured && <FeaturedProject project={featured} reduceMotion={reduceMotion} />}
         {supporting.length > 0 && <><Reveal><h3 className="projects-support-title">Other projects</h3></Reveal>
           <div className="projects-support-grid" aria-label="More projects">

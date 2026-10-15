@@ -22,9 +22,9 @@ function GitHub() {
           <SectionHeading number="07" eyebrow="GitHub" title="Selected repositories" description="Browse the code and follow the projects as they grow." id="github-title" />
         </Reveal>
         {profile && <p className="github-account"><strong>{profile.name || `@${profile.username}`}</strong>{profile.bio && <span>{profile.bio}</span>}</p>}
-        <ResourceState status={profileStatus} error={profileError} retry={retryProfile} label="GitHub profile" />
+        <ResourceState status={profileStatus} error={profileError} retry={retryProfile} label="GitHub profile" hasFallback={false} />
         <ResourceState status={status} error={error} retry={retry} label="selected repositories" />
-        {status === 'empty' ? <p className="resource-empty">No selected repositories were returned by GitHub.</p> : <div className="github-repositories">
+        {status !== 'empty' && <div className="github-repositories">
           {repositories.map((repository, index) => (
             <Reveal key={repository.fullName || repository.name} delay={index * 0.04}>
               <a className="github-repository" href={repository.url} target="_blank" rel="noreferrer">

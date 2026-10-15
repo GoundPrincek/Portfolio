@@ -13,9 +13,9 @@ export const listMessages = asyncHandler(async (req, res) => {
 })
 
 export const updateMessage = asyncHandler(async (req, res) => {
-  const readAt = req.body.status === 'READ' ? new Date() : req.body.status === 'NEW' ? null : undefined
+  const readAt = req.body.status === 'NEW' ? null : new Date()
   const message = await req.app.locals.prisma.message.update({
-    where: { id: req.params.id }, data: { status: req.body.status, ...(readAt !== undefined ? { readAt } : {}) },
+    where: { id: req.params.id }, data: { status: req.body.status, readAt },
   })
   return success(res, 'Message status updated successfully', message)
 })

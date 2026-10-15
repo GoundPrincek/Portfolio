@@ -8,7 +8,6 @@ export function useResource(loader, fallback = []) {
 
   useEffect(() => {
     let active = true
-    setStatus('loading')
     loader().then((items) => {
       if (!active) return
       const value = items ?? []
@@ -23,5 +22,9 @@ export function useResource(loader, fallback = []) {
     return () => { active = false }
   }, [loader, attempt])
 
-  return { data, status, error, retry: () => setAttempt((value) => value + 1) }
+  const retry = () => {
+    setStatus('loading')
+    setAttempt((value) => value + 1)
+  }
+  return { data, status, error, retry }
 }

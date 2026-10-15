@@ -46,7 +46,7 @@ function Journey() {
           <SectionHeading number="05" eyebrow="Internship · project showcase · debugging competition" title="Journey & experience" description="Three experiences shaping how I communicate, present my work, and solve problems." id="journey-title" />
         </Reveal>
         <ResourceState status={status} error={error} retry={retry} label="journey items" />
-        {status === 'empty' ? <p className="resource-empty">Experience and milestones will appear here when they are published.</p> : <div className="journey-layout">
+        {status !== 'empty' && <div className="journey-layout">
           <div className="journey-rail" ref={railRef} role="group" aria-label="Choose a journey milestone">
             {!reduceMotion && <motion.span className="journey-progress" aria-hidden="true" style={{ scaleY: scrollYProgress }} />}
             {data.map((item, index) => {

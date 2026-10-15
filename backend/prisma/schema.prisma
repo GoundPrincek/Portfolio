@@ -70,7 +70,7 @@ model Skill {
 }
 
 model Experience {
-  id           String   @id @default(cuid())
+  id           String    @id @default(cuid())
   title        String
   organization String
   description  String
@@ -82,34 +82,34 @@ model Experience {
   startDate    DateTime?
   endDate      DateTime?
   location     String?
-  sortOrder    Int      @default(0)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  sortOrder    Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 }
 
 model Education {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   institution String
   degree      String
   field       String
   startDate   DateTime?
   endDate     DateTime?
   description String
-  sortOrder   Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  sortOrder   Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 model Achievement {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   title       String
   category    String
   description String
   date        DateTime?
   url         String?
-  sortOrder   Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  sortOrder   Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 model Message {

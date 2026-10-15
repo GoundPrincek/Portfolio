@@ -17,8 +17,6 @@ function ProjectDetail() {
 
   useEffect(() => {
     let active = true
-    setProject(fallback)
-    setLoadState('loading')
     getProject(projectId).then((value) => {
       if (!active) return
       setProject(value)
@@ -36,7 +34,7 @@ function ProjectDetail() {
       }
     })
     return () => { active = false }
-  }, [projectId, retryCount])
+  }, [projectId, retryCount, fallback])
 
   useEffect(() => {
     if (project) {
@@ -69,7 +67,7 @@ function ProjectDetail() {
 
   return (
     <main className="detail-page page-shell" id="main-content">
-      <ResourceState status={loadState} error={loadError} retry={() => setRetryCount((count) => count + 1)} label="project details" />
+      <ResourceState status={loadState} error={loadError} retry={() => { setLoadState('loading'); setRetryCount((count) => count + 1) }} label="project details" />
       <Reveal>
         <Link className="back-link" to="/#projects"><ArrowLeft size={14} aria-hidden="true" /> Back to all projects</Link>
         <div className="detail-hero">
