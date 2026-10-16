@@ -12,7 +12,7 @@ export function errorHandler(error, req, res, _next) {
   if (status >= 500) logger.error({ err: error, method: req.method, path: req.path }, 'request failed')
   return res.status(status).json({
     success: false,
-    message: status >= 500 ? 'An unexpected error occurred.' : error.status ? error.message : status === 409 ? 'A record with these details already exists.' : status === 404 ? 'The requested resource was not found.' : error.message,
+    message: error instanceof AppError ? error.message : status >= 500 ? 'An unexpected error occurred.' : status === 409 ? 'A record with these details already exists.' : status === 404 ? 'The requested resource was not found.' : error.message,
     error: code,
   })
 }

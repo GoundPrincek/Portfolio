@@ -86,6 +86,18 @@ test('API validation, public reads, contact persistence, auth, admin CRUD, and e
     visit(openApiSpec)
   })
 
+  await t.test('returns a controlled gateway error when GitHub cannot be reached', async () => {
+    const originalFetch = globalThis.fetch
+    globalThis.fetch = async () => { throw new Error('network details must not reach the response') }
+    try {
+      const response = await request(app).get('/api/github/profile').expect(502)
+      assert.equal(response.body.error, 'GITHUB_UNAVAILABLE')
+      assert.equal(response.body.message, 'GitHub data is temporarily unavailable.')
+    } finally {
+      globalThis.fetch = originalFetch
+    }
+  })
+
   await t.test('rejects invalid contact fields and stores a valid message', async () => {
     const invalid = await request(app).post('/api/contact').send({ name: 'A', email: 'not-an-email', message: 'short' }).expect(400)
     assert.equal(invalid.body.error, 'VALIDATION_ERROR')

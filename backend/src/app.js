@@ -34,7 +34,7 @@ export function createApp({ prisma, jwtSecret, clientUrl = '', githubUsername = 
       return callback(new AppError(403, 'CORS_ORIGIN_DENIED', 'This origin is not allowed.'))
     },
   }))
-  app.use(express.json({ limit: '20kb', strict: true }))
+  app.use(express.json({ limit: '64kb', strict: true }))
   app.use(cookieParser())
   app.use(pinoHttp({
     logger,

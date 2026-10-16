@@ -28,7 +28,7 @@ The public pages keep the existing visual design and use API content with the ch
 
 ## Local setup
 
-Requirements: Node.js 20+ and a PostgreSQL database.
+Requirements: Node.js 20.19+ (or 22.12+) and a PostgreSQL database.
 
 1. Create `backend/.env` from `backend/.env.example` and set `DATABASE_URL`, a random `JWT_SECRET` of at least 32 characters, and `CLIENT_URL=http://localhost:5173`.
 2. Install dependencies and create the Prisma client:

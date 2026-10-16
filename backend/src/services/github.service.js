@@ -12,16 +12,21 @@ async function cached(key, load) {
 }
 
 async function githubFetch(path, token) {
-  const response = await fetch(`https://api.github.com${path}`, {
-    headers: {
-      Accept: 'application/vnd.github+json',
-      'X-GitHub-Api-Version': '2022-11-28',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
-    signal: AbortSignal.timeout(5000),
-  })
-  if (!response.ok) throw new AppError(502, 'GITHUB_UNAVAILABLE', 'GitHub data is temporarily unavailable.')
-  try { return await response.json() } catch { throw new AppError(502, 'GITHUB_UNAVAILABLE', 'GitHub returned an invalid response.') }
+  try {
+    const response = await fetch(`https://api.github.com${path}`, {
+      headers: {
+        Accept: 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      signal: AbortSignal.timeout(5000),
+    })
+    if (!response.ok) throw new AppError(502, 'GITHUB_UNAVAILABLE', 'GitHub data is temporarily unavailable.')
+    try { return await response.json() } catch { throw new AppError(502, 'GITHUB_UNAVAILABLE', 'GitHub returned an invalid response.') }
+  } catch (error) {
+    if (error instanceof AppError) throw error
+    throw new AppError(502, 'GITHUB_UNAVAILABLE', 'GitHub data is temporarily unavailable.')
+  }
 }
 
 export function getGitHubProfile(username, token) {
