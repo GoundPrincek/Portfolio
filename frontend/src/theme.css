@@ -1,89 +1,106 @@
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --color-bg: #092321;
+  --color-surface: #0D302D;
+  --color-card: #123B38;
+  --color-card-hover: #194A45;
+  --color-text: #F0FDFA;
+  --color-text-muted: #A7C7C1;
+  --color-primary: #5EEAD4;
+  --color-primary-hover: #99F6E4;
+  --color-primary-text: #092321;
+  --color-secondary: #2DD4BF;
+  --color-border: #28534E;
+  --color-success: #34D399;
+  --color-focus: #5EEAD4;
+  --color-overlay: rgba(3, 18, 17, 0.72);
+}
+
 :root[data-theme='light'] {
   color-scheme: light;
-  --ink: #f4f6f1;
-  --surface: #ffffff;
-  --line: #dfe5db;
-  --line-strong: #c8d2c2;
-  --accent: #4e762d;
-  --text-strong: #1d281b;
-  --text-muted: #4d5a49;
-  --text-dim: #647260;
+  --color-bg: #F0FDFA;
+  --color-surface: #E6F7F3;
+  --color-card: #FFFFFF;
+  --color-card-hover: #DDF5EF;
+  --color-text: #123B38;
+  --color-text-muted: #456B65;
+  --color-primary: #0F766E;
+  --color-primary-hover: #115E59;
+  --color-primary-text: #FFFFFF;
+  --color-secondary: #0D9488;
+  --color-border: #C5E3DC;
+  --color-success: #15803D;
+  --color-focus: #0F766E;
+  --color-overlay: rgba(9, 35, 33, 0.40);
 }
 
-:root[data-theme='light'] body {
-  background: radial-gradient(ellipse at 83% 21%, rgb(117 151 83 / 9%), transparent 35rem), var(--ink);
+:root[data-theme] {
+  --ink: var(--color-bg);
+  --surface: var(--color-surface);
+  --line: var(--color-border);
+  --line-strong: var(--color-border);
+  --accent: var(--color-primary);
+  --accent-hover: var(--color-primary-hover);
+  --accent-text: var(--color-primary-text);
+  --text-strong: var(--color-text);
+  --text-muted: var(--color-text-muted);
+  --text-dim: var(--color-text-muted);
 }
 
-:root[data-theme='light'] #root :where(*) { color: #263326; }
-:root[data-theme='light'] #root :where(h1, h2, h3, h4) { color: var(--text-strong); }
-:root[data-theme='light'] #root :where(.hero-role, .hero-description, .section-description, .about-story > p, .education-note span, .focus-tile p, .journey-description, .learned-box p, .experience-summary, .experience-action p, .experience-learnings li, .project-summary, .project-support-card .project-summary, .featured-summary, .featured-stories p, .skill-group > p, .building-card p, .lesson-card p, .beyond-copy, .github-copy > p:last-child, .contact-form-note p, .detail-summary, .detail-section > p, .detail-feature-list, .detail-status-card > p:last-child, .detail-next-project > p) { color: var(--text-muted); }
-:root[data-theme='light'] #root :where(.eyebrow, .section-eyebrow, .hero-name, .hero-role span, .status-dot, .console-prompt, .focus-tile-top, .experience-topline svg, .project-index, .building-label, .lesson-number, .beyond-card a, .nav-resume, .mobile-nav-link[download], .github-symbol, .contact-links a:hover, .project-links a:hover, .project-status.status-active, .featured-copy h3 a:hover, .featured-copy h3 svg) { color: var(--accent); }
-:root[data-theme='light'] #root :where(.section-number, .social-label, .console-topline, .console-live, .console-body, .console-footer, .console-index, .console-facts dt, .console-path, .journey-year, .journey-detail-heading > div > p, .journey-detail-year, .related-line > span, .related-line strong, .experience-category, .project-status, .project-kind, .project-tech-list span, .project-story > div > span, .featured-overline, .featured-map-topline, .featured-map-caption, .featured-stories > div > span, .featured-stack > span, .lesson-source, .footer-brand small, .footer-inner > p, .copyright, .back-link, .detail-kicker, .detail-tech-list li, .detail-next-project > a, .detail-tagline) { color: var(--text-dim); }
-:root[data-theme='light'] #root :where(.hero-socials a, .hero-bottom-note a, .education-note a, .journey-stop > svg, .journey-marker, .project-links a, .project-support-card h3 a::after, .footer-links a, .contact-links a, .nav-link) { color: var(--text-muted); }
+:root[data-theme] body {
+  color: var(--color-text);
+  background: radial-gradient(ellipse at 83% 21%, color-mix(in srgb, var(--color-primary) 9%, transparent), transparent 35rem), var(--color-bg);
+}
 
-:root[data-theme='light'] #root :where(.site-header, .mobile-menu) {
-  border-color: var(--line);
-  background: rgb(248 250 246 / 94%);
-  box-shadow: 0 16px 44px rgb(34 48 28 / 8%);
-}
-:root[data-theme='light'] #root :where(.section-focus, .section-experience, .section-building) {
-  border-color: #e8ede4;
-  background: rgb(225 232 218 / 38%);
-}
-:root[data-theme='light'] #root :where(.hero-console, .focus-tile, .journey-detail, .experience-card, .project-card, .project-support-card, .skill-group, .building-card, .lesson-card, .github-panel, .contact-form, .detail-aside-card, .detail-status-card, .detail-next-project) {
-  border-color: var(--line);
-  background: linear-gradient(150deg, rgb(255 255 255 / 88%), rgb(246 249 243 / 96%));
-  box-shadow: 0 12px 36px rgb(32 47 26 / 5%);
-}
-:root[data-theme='light'] #root :where(.project-featured) {
-  border-color: #c7d7bb;
-  background: linear-gradient(145deg, rgb(237 244 230 / 90%), #fff 70%);
-  box-shadow: 0 24px 75px rgb(32 47 26 / 9%);
-}
-:root[data-theme='light'] #root :where(.beyond-card, .detail-hero) {
-  border-color: var(--line-strong);
-  background: linear-gradient(115deg, rgb(231 239 224 / 88%), #fff 70%);
-}
-:root[data-theme='light'] #root :where(.hero-console) { background: linear-gradient(145deg, #fff, #f0f5ec); }
-:root[data-theme='light'] #root :where(.console-topline, .console-footer, .project-support-card .project-tech-list, .project-support-card .project-links, .project-featured .project-links) { border-color: var(--line); }
-:root[data-theme='light'] #root :where(.console-divider) { background: var(--line-strong); }
-:root[data-theme='light'] #root .journey-rail::before { background: var(--line-strong); }
-:root[data-theme='light'] #root :where(.journey-marker) { border-color: var(--line-strong); background: #f5f8f2; }
-:root[data-theme='light'] #root :where(.journey-stop:hover, .journey-stop.is-selected) { border-color: var(--line-strong); background: #fff; }
-:root[data-theme='light'] #root :where(.journey-stop.is-selected .journey-marker, .journey-detail-icon, .beyond-icon, .brand-mark, .github-symbol) { border-color: #c4d5b7; background: #edf4e7; }
-:root[data-theme='light'] #root :where(.learned-box, .project-support-sos-setu, .project-support-wide) { border-color: #d9e4d1; background: linear-gradient(135deg, rgb(232 241 225 / 95%), #fff); }
-:root[data-theme='light'] #root :where(.education-note, .about-process li, .focus-tags li, .project-feature-list span, .featured-stack li, .detail-tech-list li) { border-color: var(--line); background: #f8faf6; }
-:root[data-theme='light'] #root :where(.site-footer) { border-color: var(--line); background: #edf1e9; }
-:root[data-theme='light'] #root :where(.contact-form input, .contact-form textarea) { border-color: var(--line-strong); background: #fff; color: var(--text-strong); }
-:root[data-theme='light'] #root :where(.admin-panel, .admin-overview-card, .admin-list-item, .admin-content-form, .admin-message) { border-color: var(--line); background: #fff; box-shadow: 0 12px 36px rgb(32 47 26 / 5%); }
-:root[data-theme='light'] #root :where(.admin-form input, .admin-form textarea, .admin-message select) { border-color: var(--line-strong); background: #fff; color: var(--text-strong); }
-:root[data-theme='light'] #root :where(.admin-form label, .admin-nav a, .admin-logout, .admin-list-actions a, .admin-list-actions button) { color: var(--text-muted); }
-:root[data-theme='light'] #root :where(.admin-header, .admin-nav, .admin-message header) { border-color: var(--line); }
-:root[data-theme='light'] #root :where(.admin-overview-card:hover, .admin-list-item) { border-color: var(--line-strong); }
-:root[data-theme='light'] #root :where(.resource-state, .resource-empty, .admin-note) { border-color: var(--line); }
-:root[data-theme='light'] #root :where(.featured-map) { border-color: #dbe4d5; background: radial-gradient(ellipse at 48% 48%, rgb(117 151 83 / 13%), transparent 47%), linear-gradient(155deg, #edf3e9, #e4ecdf 72%); }
-:root[data-theme='light'] #root :where(.featured-map-center, .map-node) { border-color: #c7d7bc; background: rgb(255 255 255 / 94%); box-shadow: 0 9px 30px rgb(44 61 36 / 10%); }
-:root[data-theme='light'] #root :where(.featured-map-center) { color: #42662b; }
-:root[data-theme='light'] #root :where(.map-node small) { color: var(--text-muted); }
-:root[data-theme='light'] #root :where(.featured-map-orbit) { border-color: rgb(78 118 45 / 18%); }
-:root[data-theme='light'] #root :where(.map-caption-line) { background: #9aaf88; }
-:root[data-theme='light'] #root .featured-map-core::before,
-:root[data-theme='light'] #root .featured-map-core::after { background: linear-gradient(90deg, transparent, rgb(78 118 45 / 30%), transparent); }
-:root[data-theme='light'] #root .journey-progress { background: var(--accent); }
-:root[data-theme='light'] #root :where(.project-links-featured .project-case-link) { border-color: #a9c292; background: #edf5e6; }
-:root[data-theme='light'] #root :where(.button-primary) { background: var(--accent); color: #fff; }
-:root[data-theme='light'] #root :where(.button-primary:hover) { background: #426727; }
-:root[data-theme='light'] #root :where(.button-secondary, .nav-github, .theme-toggle) { border-color: var(--line-strong); background: rgb(255 255 255 / 68%); color: #263326; }
-:root[data-theme='light'] #root :where(.nav-github:hover, .button-secondary:hover, .theme-toggle:hover) { border-color: #9cb98a; background: #eef5e9; }
-:root[data-theme='light'] #root :where(.project-status i) { background: #71934f; }
-:root[data-theme='light'] #root :where(.status-dot, .console-live > span, .building-label i) { background: var(--accent); box-shadow: 0 0 0 4px rgb(78 118 45 / 12%); }
-:root[data-theme='light'] #root .project-support-card h3 a::after { color: #66894b; }
-:root[data-theme='light'] #root :where(.button:focus-visible, a:focus-visible, button:focus-visible) { outline-color: var(--accent); }
+#root { color: var(--color-text); }
+#root :where(*) { color: var(--color-text); }
+#root :where(h1, h2, h3, h4, .brand, .footer-brand strong, .console-body h2, .experience-card h3, .project-title-link, .skill-group-heading h3, .building-card h3, .lesson-card h3, .detail-status-card h2, .detail-next-project h2, .projects-support-title, .admin-page h1, .admin-list-item h3, .admin-message h2, .github-repository-copy strong) { color: var(--color-text); }
+#root :where(p, li, label, small, dt, dd, .hero-socials a, .hero-bottom-note a, .journey-stop, .journey-stop-title, .journey-description, .journey-detail-heading > div > p, .journey-detail-year, .related-line strong, .experience-action p, .experience-learnings ul, .project-summary, .project-story p, .project-links a, .skill-group > p, .skill-group li, .building-card p, .lesson-card p, .github-copy > p:last-child, .contact-links a, .contact-form label, .contact-form-note p, .footer-links a, .footer-inner > p, .copyright, .back-link, .detail-kicker, .detail-summary, .detail-section > p, .detail-feature-list, .detail-tech-list li, .detail-status-card > p:last-child, .detail-next-project > p, .console-intro, .console-body, .console-muted, .console-value, .console-path, .console-facts dd, .developer-signal-item, .featured-subtitle, .featured-stories p, .map-node, .map-node small, .project-feature-list span, .project-tech-list span, .featured-stack li, .github-repository-copy small, .admin-description, .admin-nav a, .admin-logout, .admin-list-item p, .admin-list-actions a, .admin-list-actions button, .admin-message-body, .admin-message header p, .admin-message time, .admin-form label, .hero-role, .hero-description, .section-description, .about-story > p, .education-note span, .focus-tile p, .experience-summary, .featured-summary, .beyond-copy, .form-heading span, .journey-stop-title, .journey-marker, .project-title-link > span, .project-tagline, .project-kind, .project-feature-list span, .project-tech-list span, .project-story > div > span, .skill-row h3, .skill-row li, .focus-tags li, .about-process li, .about-process li > span, .project-index span, .project-status, .project-status i, .github-repository-number, .featured-map-topline span:last-child, .project-support-card h3 a::after, .project-support-card .project-feature-list span, .project-support-card .project-tech-list span, .project-support-card .project-links a) { color: var(--color-text-muted); }
+#root :where(.eyebrow, .section-eyebrow, .hero-name, .hero-role span, .status-dot, .console-prompt, .console-value > span, .focus-tile-top, .focus-icon, .education-note, .journey-stop.is-featured .journey-marker, .journey-stop.is-selected .journey-marker, .journey-detail-icon, .journey-detail-heading > div > p > span, .eyebrow-small, .experience-topline svg, .experience-learnings li::marker, .experience-journey-link, .project-index, .project-status.status-active, .project-title-link:hover, .project-expand:hover, .project-links a:hover, .skill-group-heading, .lesson-number, .beyond-icon, .beyond-card a, .github-symbol, .contact-links a:hover, .contact-form-note > svg, .footer-links a:hover, .back-link:hover, .detail-kicker > span:first-child, .detail-tagline, .detail-feature-list li::marker, .detail-next-project > a, .resource-state button, .admin-feedback button, .admin-eyebrow, .admin-text-link:hover, .admin-back-link:hover, .admin-overview-card small, .admin-note, .admin-feedback-success, .focus-band-item:not(:last-child)::after, .github-repository:hover > svg) { color: var(--color-primary); }
+#root :where(.section-number, .social-label, .console-topline, .console-live, .console-footer, .console-index, .console-facts dt, .focus-tile-top > span, .developer-signal-label, .journey-year, .related-line > span, .experience-topline, .experience-category, .project-index span, .project-status, .project-kind, .project-tech-list span:not(:last-child)::after, .project-story > div > span, .building-label, .building-arrow, .lesson-source, .featured-map-topline, .featured-map-caption, .featured-overline, .featured-stories > div > span, .featured-stack > span, .footer-brand small, .detail-tech-list li, .detail-next-project > a, .admin-header-actions a) { color: var(--color-text-muted); }
 
-.theme-toggle { display: inline-grid; width: 38px; height: 38px; flex: 0 0 auto; place-items: center; border: 1px solid var(--line-strong); border-radius: 50%; background: transparent; color: var(--text-strong); cursor: pointer; transition: transform 180ms ease, background-color 180ms ease, border-color 180ms ease; }
-.theme-toggle:hover { transform: rotate(12deg); border-color: rgb(196 240 117 / 50%); background: rgb(196 240 117 / 7%); }
-.mobile-theme-toggle { width: 100%; border: 0; background: transparent; text-align: left; cursor: pointer; }
-:root[data-theme='light'] #root :where(.mobile-theme-toggle) { color: var(--text-strong); }
+#root :where(.site-header) { border-color: var(--color-border); background: var(--color-overlay); }
+#root :where(.mobile-menu) { border-color: var(--color-border); background: var(--color-surface); box-shadow: 0 20px 50px var(--color-overlay); }
+#root :where(.section-focus, .section-experience, .section-building) { border-color: color-mix(in srgb, var(--color-border) 60%, transparent); background: color-mix(in srgb, var(--color-surface) 54%, transparent); }
+#root :where(.hero-console, .focus-tile, .journey-detail, .experience-card, .project-card, .project-support-card, .skill-group, .building-card, .lesson-card, .github-panel, .contact-form, .detail-aside-card, .detail-status-card, .detail-next-project, .admin-panel, .admin-overview-card, .admin-list-item, .admin-content-form, .admin-message) { border-color: var(--color-border); background: var(--color-card); }
+#root :where(.hero-console, .journey-detail, .experience-card, .project-card, .project-support-card, .detail-hero, .beyond-card, .admin-panel) { box-shadow: 0 18px 48px color-mix(in srgb, var(--color-bg) 22%, transparent); }
+#root :where(.focus-tile:hover, .journey-stop:hover, .journey-stop.is-selected, .project-card:hover, .project-support-card:hover, .admin-overview-card:hover, .admin-list-item:hover) { border-color: var(--color-secondary); background-color: var(--color-card-hover); }
+#root :where(.project-featured) { border-color: var(--color-border); background: var(--color-card); }
+#root :where(.detail-hero, .beyond-card, .project-support-wide, .project-support-sos-setu) { border-color: var(--color-border); background: var(--color-card); }
+#root :where(.featured-map) { border-color: var(--color-border); background: radial-gradient(ellipse at 48% 48%, color-mix(in srgb, var(--color-primary) 9%, transparent), transparent 47%), linear-gradient(155deg, var(--color-card-hover), var(--color-surface) 72%); }
+#root :where(.featured-map-center, .map-node) { border-color: var(--color-border); background: var(--color-card-hover); color: var(--color-text); }
+#root :where(.featured-map-center) { color: var(--color-text); }
+#root :where(.map-caption-line, .console-divider) { background: var(--color-border); }
+#root :where(.journey-rail::before, .journey-marker, .journey-stop.is-selected .journey-marker, .journey-detail-icon, .brand-mark, .github-symbol, .beyond-icon, .project-status, .project-feature-list span, .featured-stack li, .detail-tech-list li, .focus-tags li, .about-process li) { border-color: var(--color-border); }
+#root :where(.journey-marker, .journey-stop.is-selected .journey-marker, .journey-detail-icon, .brand-mark, .github-symbol, .beyond-icon, .focus-tags li, .about-process li, .project-feature-list span, .featured-stack li, .detail-tech-list li, .skill-group li, .skill-row li) { background: var(--color-surface); }
+#root :where(.skill-row li, .project-feature-list span, .featured-stack li, .detail-tech-list li) { border-color: var(--color-border); }
+#root .journey-rail::before { background: var(--color-border); }
+#root :where(.journey-progress) { background: var(--color-primary); box-shadow: 0 0 10px color-mix(in srgb, var(--color-primary) 48%, transparent); }
+#root :where(.status-dot, .console-live > span, .building-label i, .project-status.status-active i) { background: var(--color-primary); box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-primary) 12%, transparent); }
+#root :where(.featured-map::before, .featured-map::after) { border-color: color-mix(in srgb, var(--color-primary) 8%, transparent); }
+#root .featured-map-core::before,
+#root .featured-map-core::after { background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-primary) 24%, transparent), transparent); }
+#root :where(.featured-map-orbit) { border-color: color-mix(in srgb, var(--color-primary) 14%, transparent); }
+#root :where(.featured-map-orbit-two) { border-color: color-mix(in srgb, var(--color-primary) 10%, transparent); }
+#root :where(.featured-map-center) { box-shadow: 0 0 44px color-mix(in srgb, var(--color-primary) 9%, transparent); }
+#root :where(.learned-box) { border-left-color: var(--color-primary); background: color-mix(in srgb, var(--color-primary) 8%, var(--color-card)); }
+#root :where(.education-note) { border-color: var(--color-border); background: color-mix(in srgb, var(--color-primary) 6%, var(--color-card)); }
+#root :where(.site-footer) { border-color: var(--color-border); background: var(--color-surface); }
+#root :where(.contact-form input, .contact-form textarea, .admin-form input, .admin-form textarea, .admin-message select) { border-color: var(--color-border); background: var(--color-surface); color: var(--color-text); }
+#root :where(.button-primary) { background: var(--color-primary); color: var(--color-primary-text); }
+#root :where(.button-primary:hover) { background: var(--color-primary-hover); color: var(--color-primary-text); }
+#root :where(.button-secondary, .nav-github, .theme-toggle, .admin-logout) { border-color: var(--color-border); color: var(--color-text); }
+#root :where(.button-secondary:hover, .nav-github:hover, .theme-toggle:hover, .admin-logout:hover, .nav-resume, .project-links-featured .project-case-link) { border-color: var(--color-primary); background: color-mix(in srgb, var(--color-primary) 10%, var(--color-card)); color: var(--color-primary); }
+#root :where(.nav-resume:hover, .project-links-featured .project-case-link:hover) { background: color-mix(in srgb, var(--color-primary) 16%, var(--color-card)); }
+#root :where(.nav-link::after, .mobile-nav-link:hover, .mobile-nav-link.is-active) { background: var(--color-primary); }
+#root :where(.mobile-nav-link:hover, .mobile-nav-link.is-active) { background: color-mix(in srgb, var(--color-primary) 9%, var(--color-surface)); color: var(--color-primary); }
+#root :where(.contact-form input:focus, .contact-form textarea:focus, .admin-form input:focus, .admin-form textarea:focus, .admin-message select:focus) { border-color: var(--color-focus); box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-focus) 16%, transparent); }
+#root :where(a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible) { outline-color: var(--color-focus); }
+#root :where(.form-success, .admin-feedback-success) { color: var(--color-success); }
+
+.theme-toggle { display: inline-grid; width: 38px; height: 38px; flex: 0 0 auto; place-items: center; border: 1px solid var(--color-border); border-radius: 50%; background: transparent; color: var(--color-text); cursor: pointer; transition: transform 180ms ease, background-color 180ms ease, border-color 180ms ease; }
+.theme-toggle:hover { transform: rotate(12deg); }
+.mobile-theme-toggle { width: 100%; border: 0; background: transparent; color: var(--color-text); text-align: left; cursor: pointer; }
 
 @media (max-width: 840px) {
   .nav-content .theme-toggle { display: none; }

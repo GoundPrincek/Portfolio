@@ -4,7 +4,22 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0d0f0f" />
+    <meta name="theme-color" content="#092321" />
+    <script>
+      (() => {
+        let theme;
+        try {
+          theme = localStorage.getItem('portfolio-theme');
+        } catch {
+          // Use the system preference when browser storage is unavailable.
+        }
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = window.matchMedia?.('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        }
+        document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]').content = theme === 'dark' ? '#092321' : '#F0FDFA';
+      })();
+    </script>
     <meta name="description" content="Prince Gound is an IT Engineering student and full-stack developer learning by building practical software, exploring backend systems, and strengthening Java and DSA fundamentals." />
     <meta property="og:title" content="Prince Gound | Full-Stack Developer &amp; IT Engineering Student" />
     <meta property="og:description" content="Learning by building practical software, exploring backend systems, and growing through projects and technical challenges." />

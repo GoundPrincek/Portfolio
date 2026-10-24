@@ -18,10 +18,12 @@ function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [theme, setTheme] = useState(() => {
     try {
-      return window.localStorage.getItem('portfolio-theme') === 'light' ? 'light' : 'dark'
+      const savedTheme = window.localStorage.getItem('portfolio-theme')
+      if (savedTheme === 'light' || savedTheme === 'dark') return savedTheme
     } catch {
-      return 'dark'
+      // Fall through to the theme selected before the page loaded.
     }
+    return document.documentElement.dataset.theme || (window.matchMedia?.('(prefers-color-scheme: light)').matches ? 'light' : 'dark')
   })
   const reduceMotion = useReducedMotion()
   const { pathname } = useLocation()
@@ -47,14 +49,19 @@ function Navbar() {
   const resumeLink = contactDetails.resume
   const nextTheme = theme === 'dark' ? 'light' : 'dark'
   const ThemeIcon = theme === 'dark' ? Sun : Moon
-
-  useEffect(() => {
-    document.documentElement.dataset.theme = theme
+  const changeTheme = () => {
+    setTheme(nextTheme)
     try {
-      window.localStorage.setItem('portfolio-theme', theme)
+      window.localStorage.setItem('portfolio-theme', nextTheme)
     } catch {
       // The theme still applies for this visit when browser storage is unavailable.
     }
+  }
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+    const themeColor = document.querySelector('meta[name="theme-color"]')
+    if (themeColor) themeColor.content = theme === 'dark' ? '#092321' : '#F0FDFA'
   }, [theme])
 
   return (
@@ -73,7 +80,7 @@ function Navbar() {
               return <a className={`nav-link${activeSection === href && isHome ? ' is-active' : ''}`} href={destination} key={href} onClick={() => selectSection(href)} aria-current={activeSection === href && isHome ? 'location' : undefined}>{label}</a>
             })}
           </div>
-          <button className="theme-toggle" type="button" onClick={() => setTheme(nextTheme)} aria-label={`Switch to ${nextTheme} mode`} aria-pressed={theme === 'light'} title={`Switch to ${nextTheme} mode`}>
+          <button className="theme-toggle" type="button" onClick={changeTheme} aria-label={`Switch to ${nextTheme} mode`} aria-pressed={theme === 'light'} title={`Switch to ${nextTheme} mode`}>
             <ThemeIcon size={17} aria-hidden="true" />
           </button>
           <a className="nav-github" href={links.github} target="_blank" rel="noreferrer"><Code2 size={16} aria-hidden="true" /><span>GitHub</span><ArrowUpRight size={14} aria-hidden="true" /></a>
@@ -87,7 +94,7 @@ function Navbar() {
                 <a className={`mobile-nav-link${isHome && activeSection === href ? ' is-active' : ''}`} href={sectionHref(href)} key={href} onClick={() => selectSection(href)} aria-current={isHome && activeSection === href ? 'location' : undefined}>{label}<ArrowUpRight size={15} aria-hidden="true" /></a>
               ))}
               <a className="mobile-nav-link mobile-github-link" href={links.github} target="_blank" rel="noreferrer">GitHub profile <ArrowUpRight size={15} aria-hidden="true" /></a>
-              <button className="mobile-nav-link mobile-theme-toggle" type="button" onClick={() => setTheme(nextTheme)}><span>{`Switch to ${nextTheme} mode`}</span><ThemeIcon size={16} aria-hidden="true" /></button>
+              <button className="mobile-nav-link mobile-theme-toggle" type="button" onClick={changeTheme} aria-label={`Switch to ${nextTheme} mode`} aria-pressed={theme === 'light'}><span>{`Switch to ${nextTheme} mode`}</span><ThemeIcon size={16} aria-hidden="true" /></button>
               {resumeLink && <a className="mobile-nav-link" href={resumeLink} download>Download resume <ArrowUpRight size={15} aria-hidden="true" /></a>}
             </motion.div>
           )}
